@@ -34,30 +34,30 @@
   <main>
     <header>
       <div class="tag">B41M 17PLAYBOX // PS4 WEBKIT HOST</div>
-      <h1>Pilih Firmware PS4</h1>
-      <p>Pilih rentang firmware yang sesuai dengan konsol sebelum melanjutkan.</p>
+      <h1>Deteksi Firmware PS4</h1>
+      <p>Firmware konsol akan diperiksa dan diarahkan ke host yang sesuai.</p>
     </header>
     <div id="cache-status" class="cache-status" role="status">Menyiapkan cache offline...</div>
 
-    <section class="choices" aria-label="Pilihan firmware">
+    <section class="choices" aria-label="Host firmware">
       <a href="6/index.html">
         <div class="range">6.00 – 10.50</div>
         <h2>WebKit Legacy</h2>
         <p class="desc">Host untuk firmware PS4 6.00 sampai 10.50, dengan pilihan chain NetCtrl atau Lapse.</p>
-        <span class="open">BUKA HOST →</span>
+        <span class="open">HOST TERSEDIA</span>
       </a>
 
       <a href="11/index.html">
         <div class="range">11.00 – 13.00</div>
         <h2>WebKit Modern</h2>
         <p class="desc">Host untuk firmware 11.00 sampai 13.00. Metode dipilih otomatis berdasarkan firmware yang terdeteksi.</p>
-        <span class="open">BUKA HOST →</span>
+        <span class="open">HOST TERSEDIA</span>
       </a>
     </section>
 
-    <button id="change-choice" class="change-choice" type="button">GANTI PILIHAN FIRMWARE</button>
+    <button id="change-choice" class="change-choice" type="button">PILIH MANUAL</button>
 
-    <footer>Pastikan versi System Software PS4 cocok dengan pilihan di atas. Gunakan hanya pada perangkat milik Anda sendiri.</footer>
+    <footer>Host akan dipilih berdasarkan firmware yang terbaca. Gunakan hanya pada perangkat milik Anda sendiri.</footer>
   </main>
   <script>
     (function () {
@@ -66,8 +66,36 @@
       var choices = document.querySelectorAll(".choices a");
       var changeButton = document.getElementById("change-choice");
       var request = new URLSearchParams(location.search);
-      var savedChoice;
-      try { savedChoice = localStorage.getItem(choiceKey); } catch (e) {}
+      var savedChoice, detectedFirmware;
+      var supportedFirmware = {
+        "11.00": "11/index.html", "11.50": "11/index.html",
+        "12.00": "11/index.html", "12.02": "11/index.html",
+        "12.50": "11/index.html", "12.52": "11/index.html",
+        "13.00": "11/index.html"
+      };
+      var legacyFirmware = /^(6|7|8|9|10)\\./;
+
+      function detectFirmware() {
+        var match = /PlayStation\\s+4[\\/ ](\\d+)\\.(\\d+)/.exec(navigator.userAgent);
+        if (!match) return null;
+        var minor = parseInt(match[2], 16).toString(16).padStart(2, "0");
+        return match[1] + "." + minor;
+      }
+
+      detectedFirmware = detectFirmware();
+      if (detectedFirmware && supportedFirmware[detectedFirmware]) {
+        savedChoice = supportedFirmware[detectedFirmware];
+        message("Firmware " + detectedFirmware + " terdeteksi — menyiapkan host yang sesuai...", true);
+      } else if (detectedFirmware && legacyFirmware.test(detectedFirmware)) {
+        savedChoice = "6/index.html";
+        message("Firmware " + detectedFirmware + " terdeteksi — menyiapkan host legacy...", true);
+      } else if (detectedFirmware) {
+        message("Firmware " + detectedFirmware + " belum didukung oleh host ini.", false);
+      } else {
+        message("Firmware tidak dapat dideteksi. Silakan pilih host secara manual.", false);
+      }
+
+      try { if (!detectedFirmware && !savedChoice) savedChoice = localStorage.getItem(choiceKey); } catch (e) {}
       var renamedHosts = {
         "Webkit6-10.50/index.html": "6/index.html",
         "Webkit11-13/index.html": "11/index.html"
@@ -90,8 +118,10 @@
         if (savedChoice) location.replace(savedChoice);
       }
       function cacheReady() {
-        message("Cache offline siap. Pilihan firmware akan disimpan di perangkat ini.", true);
-        if (savedChoice) window.setTimeout(openSavedChoice, 450);
+        if (!savedChoice) return;
+        message("Cache offline siap — membuka host untuk firmware " + (detectedFirmware || "yang dipilih") + "...", true);
+        try { localStorage.setItem(choiceKey, savedChoice); } catch (e) {}
+        window.setTimeout(openSavedChoice, 450);
       }
 
       for (var i = 0; i < choices.length; i++) {
@@ -103,7 +133,7 @@
         try { localStorage.removeItem(choiceKey); } catch (e) {}
         savedChoice = null;
         changeButton.style.display = "none";
-        message("Silakan pilih firmware yang benar.", true);
+        message("Pilih host firmware secara manual.", true);
       });
 
       if (savedChoice) {
