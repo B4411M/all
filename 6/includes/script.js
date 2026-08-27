@@ -53,13 +53,13 @@ function stopInterval(){
 function jailbreakCountdown() {   
     stopInterval();
 
-    let countdown = 5;
+    let countdown = 1;
     label.textContent = `Auto Jailbreaking in: ${countdown}`;
     timerId = setInterval(() => {
         countdown--;
         label.textContent = `Auto Jailbreaking in: ${countdown}`;
 
-        if (countdown < 0) {
+        if (countdown <= 0) {
             jeilbrekBtn.disabled = true; 
             clearInterval(timerId);
             timerId = null;
