@@ -275,7 +275,7 @@ function makeRpc(worker) {
         const ua = navigator.userAgent;
         const { key, off } = offsetsFor(ua);
         mark("FW", key || "(not a PS4 UA)");
-        if (!off) { state("no offsets for this firmware", "bad"); return; }
+        if (!off) { state("Tidak ada untuk firmware ini.", "bad"); return; }
 
         mark("FW-STATUS", key + " -- " + (off.fw_status
             || "no status recorded in the offsets block."));
