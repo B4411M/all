@@ -1,0 +1,11 @@
+CACHE MANIFEST
+# B41M-ROOT-OFFLINE-20260827-03
+
+CACHE:
+index.html
+
+NETWORK:
+*
+
+FALLBACK:
+index.html index.html

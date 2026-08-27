@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id" manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B41M | PS4 Exploit Host</title>
+<style>
+  * { box-sizing:border-box; }
+  html, body { min-height:100%; margin:0; }
+  body { overflow:hidden; background:#050b0c; color:#d7ebe5;
+         font:15px/1.5 "Segoe UI", Arial, sans-serif; }
+  body:before, body:after { content:""; position:fixed; inset:0; pointer-events:none; }
+  body:before { opacity:.22; background-image:linear-gradient(rgba(49,255,166,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(49,255,166,.12) 1px, transparent 1px); background-size:42px 42px; }
+  body:after { opacity:.35; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px); }
+  .matrix { position:fixed; top:0; bottom:0; width:180px; overflow:hidden; opacity:.11; color:#3dff9d; font:12px/1.05 monospace; word-break:break-all; pointer-events:none; }
+  .matrix.left { left:20px; } .matrix.right { right:20px; text-align:right; }
+  #shell { position:relative; z-index:1; min-height:100vh; padding:28px; display:flex; flex-direction:column; }
+  #brand { display:flex; align-items:center; padding:0 0 22px; border-bottom:1px solid rgba(96,255,184,.24); }
+  #brand img { width:42px; height:42px; margin-right:13px; border-radius:50%; border:1px solid #42e99c; box-shadow:0 0 18px rgba(50,255,157,.45); }
+  .brand-copy { position:relative; line-height:1.05; }
+  .brand-name { position:relative; display:block; color:#e8fff4; font:800 25px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; text-shadow:2px 0 #0b6d46, -1px 0 rgba(115,255,190,.8), 0 0 16px rgba(55,255,156,.7); }
+  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; text-shadow:none; }
+  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; text-shadow:none; }
+  .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
+  .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
+  .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
+  #wrap { width:100%; max-width:760px; margin:auto; padding:32px; background:linear-gradient(135deg, rgba(11,27,26,.96), rgba(5,15,14,.93)); border:1px solid rgba(91,255,177,.32); box-shadow:0 20px 70px rgba(0,0,0,.55), inset 0 0 32px rgba(36,225,137,.035); }
+  .eyebrow { margin-bottom:11px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
+  .eyebrow:before { content:"// "; color:#9effc9; }
+  #state { margin:0 0 16px; color:#effff7; font-size:29px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
+  #det { padding:13px 15px; border-left:3px solid #27d889; background:rgba(37,129,87,.1); color:#92b7a9; font-size:13px; }
+  #det b { color:#e0fff0; font-weight:600; }
+  #cache { min-height:20px; margin-top:16px; padding-top:15px; border-top:1px solid rgba(120,223,176,.14); color:#7d9b90; font:12px monospace; }
+  #cache:before { content:"STATUS  "; color:#3fe69a; letter-spacing:.08em; }
+  #cache.cacheok { color:#8df2b7; }
+  .change-choice { display:inline-block; margin-top:16px; padding:7px 10px; border:1px solid rgba(59,239,152,.42); color:#8df2b7; font:11px monospace; letter-spacing:.06em; text-decoration:none; }
+  .change-choice:hover, .change-choice:focus { border-color:#8df2b7; color:#effff7; outline:none; }
+  .ok { color:#8df2b7 !important; } .bad { color:#ff897d !important; } .warn { color:#ffd572 !important; }
+  .footer { padding-top:18px; color:#527366; font:10px/1.7 monospace; letter-spacing:.07em; text-align:center; }
+  .footer div { display:inline; }
+  .footer div + div:before { content:"  ·  "; color:#2f8660; }
+  .footer b { color:#39dd91; font-weight:400; }
+  @media (max-width:560px) { #shell { padding:18px; } #wrap { padding:24px 20px; } #state { font-size:22px; } .session { display:none; } .matrix { opacity:.06; width:90px; } }
+</style>
+</head>
+<body>
+<div class="matrix left">01001000 01000001 01000011 01001011<br>ROOT ACCESS // B41M<br>10101100 01010011 11001010<br>PAYLOAD READY<br>01101010 11010010 00101101<br>SYSTEM ONLINE // 13.00<br>01010010 00110101 10101001</div>
+<div class="matrix right">B41M // SECURE NODE<br>10011010 00101011 11010100<br>EXPLOIT HOST ONLINE<br>01010101 11001001 00110010<br>PS4 // WEBKIT // CORE<br>10100110 01010110 10110001</div>
+<main id="shell">
+  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">PS4 EXPLOIT HOST · FW 11.00 · 11.50 · 12.00/12.02 · 12.50/12.52 · 13.00</span></div><span class="session">[ ROOT ACCESS / ACTIVE ]</span></header>
+  <section id="wrap" aria-live="polite">
+    <div class="eyebrow">B41M SECURITY CONSOLE</div>
+    <div id="state">Mendeteksi firmware...</div>
+    <div id="det"></div>
+    <div id="cache"></div>
+    <a class="change-choice" href="../index.html?change=1">GANTI PILIHAN FIRMWARE</a>
+  </section>
+  <footer class="footer">
+    <div><b>[ALAMAT]</b> Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</div>
+    <div><b>[KONTAK]</b> 085555551497</div>
+    <div><b>[COPYRIGHT]</b> © 2026 B41M 17PlayBox</div>
+    <div><b>[PEMILIK]</b> Ibrahim Yusuf</div>
+  </footer>
+</main>
+
+<script>
+(function () {
+    var stateEl = document.getElementById("state");
+    var detEl = document.getElementById("det");
+    var cacheEl = document.getElementById("cache");
+    function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
+    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    var params = new URLSearchParams(location.search);
+
+    var key = null, fwnum = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    if (m) {
+        var minor = parseInt(m[2], 16);
+        var ms = minor.toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
+    }
+    var bug = null, why = "";
+    var forced = params.get("bug");
+    if (forced === "lapse" || forced === "poops") {
+        bug = forced; why = "dipilih melalui ?bug=" + forced;
+    } else if (!key) {
+        why = "";
+    } else if (fwnum <= 1202) {
+        bug = "lapse"; why = key + " ≤ 12.02";
+    } else if (fwnum >= 1250) {
+        bug = "poops"; why = key + " ≥ 12.50";
+    } else {
+        why = key + " — tidak ada eksploit yang cocok (lapse hingga 12.02, poops mulai 12.50)";
+    }
+    detEl.innerHTML = "Firmware: <b>" + (key || "tidak dapat dideteksi") + "</b>"
+        + " &middot; Metode: <b>" + (bug || "sistem tidak kompatibel") + "</b> &middot; " + why;
+
+    if (!bug) { setState("Firmware tidak kompatibel", "bad"); return; }
+
+    var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html")
+        + location.search;
+    var startQueued = false;
+    function go() {
+        if (startQueued) return;
+        startQueued = true;
+        setCache("Cache siap — memulai chain secara otomatis", true);
+        setState("Memuat rangkaian " + bug + "...", "warn");
+        location.replace(target);
+    }
+
+    function waitForTap(msg, action) {
+        setState(msg + " — memulai otomatis", "warn");
+        window.setTimeout(action, 0);
+    }
+
+    var ac = window.applicationCache;
+    if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        go();
+    } else if (!navigator.onLine) {
+        setCache("Mode luring — dimuat dari cache", true);
+        go();
+    } else if (ac.status === ac.IDLE) {
+        setCache("Cache siap digunakan", true);
+        go();
+    } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        setCache("Pembaruan telah diunduh", true);
+        waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
+                   function () { location.reload(); });
+    } else {
+        setCache("Memeriksa cache...");
+        ac.addEventListener("downloading",
+            function () { setCache("Menyimpan cache untuk mode luring (pertama kali)..."); }, false);
+        ac.addEventListener("progress", function (e) {
+            if (e && e.total)
+                setCache("Menyimpan cache " + Math.round((e.loaded / e.total) * 100) + "%");
+        }, false);
+
+        ac.addEventListener("cached", function () {
+            setCache("Cache luring siap digunakan", true);
+            waitForTap("CACHE SIAP (pertama kali) — menjalankan", go);
+        }, false);
+        ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            setCache("Pembaruan telah diunduh", true);
+            waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
+                       function () { location.reload(); });
+        }, false);
+
+        ac.addEventListener("noupdate", function () {
+            setCache("Cache siap — mode luring tersedia", true);
+            go();
+        }, false);
+        ac.addEventListener("error", function () {
+            setCache("Cache tidak tersedia");
+            waitForTap("CACHE GAGAL — tetap menjalankan", go);
+        }, false);
+        ac.addEventListener("obsolete", function () {
+            setCache("Cache kedaluwarsa");
+            waitForTap("CACHE KEDALUWARSA — menjalankan", go);
+        }, false);
+    }
+})();
+</script>
+</body>
+</html>
