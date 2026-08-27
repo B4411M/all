@@ -275,7 +275,7 @@ function makeRpc(worker) {
         const ua = navigator.userAgent;
         const { key, off } = offsetsFor(ua);
         mark("FW", key || "(not a PS4 UA)");
-        if (!off) { state("no offsets for this firmware", "bad"); return; }
+        if (!off) { state("Tidak ada untuk firmware ini.", "bad"); return; }
 
         mark("FW-STATUS", key + " -- " + (off.fw_status
             || "no status recorded in the offsets block."));
@@ -285,7 +285,7 @@ function makeRpc(worker) {
                   + "WITHHELD. Nothing is freed twice and no reboot is owed."
                 : "  -- ARMED: the worker issues a REAL aio_multi_delete"));
 
-        state("running the primitive...", "warn");
+        state("Menjalankan Sistem...", "warn");
 
         await new Promise(function (r) { setTimeout(r, 0); });
         const carrier = await establishPrimitive({
@@ -685,7 +685,7 @@ function makeRpc(worker) {
                 return c.join(",");
             })() + " are available to this process)");
 
-        state("wiring the worker...", "warn");
+        state("Mengatur Pola Pekerja...", "warn");
         worker = new Worker("rpc_worker.js");
         rpc = makeRpc(worker);
         await rpc("ping");
@@ -784,7 +784,7 @@ function makeRpc(worker) {
         }
         mark("SPRAY-CANCELLED", "");
 
-        state("dry run: everything but the racing delete...", "warn");
+        state("Uji Coba : Semua Sistem...", "warn");
         servAddr.dv.setUint8(0, 16);
         servAddr.dv.setUint8(1, AF_INET);
         servAddr.dv.setUint16(2, 0x8d13, true);
@@ -1032,7 +1032,7 @@ function makeRpc(worker) {
             return null;
         }
 
-        state("racing...", "warn");
+        state("Terhubung...", "warn");
         mark("ARMED", "one core " + ONE_CORE + ", suspend rendezvous, attempts=" + ATTEMPTS
             + "  -- the worker now issues a REAL aio_multi_delete");
 
