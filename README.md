@@ -24,7 +24,7 @@ B41M 17PlayBox adalah host web untuk menjalankan workflow WebKit pada browser Pl
 | Host | Firmware | Keterangan |
 | --- | --- | --- |
 | `6/` | 6.00-10.50 | Host legacy dengan pilihan chain NetCtrl atau Lapse. |
-| `11/` | 11.00, 11.50, 12.00, 12.02, 12.50, 12.52, 13.00 | Host modern dengan chain sesuai tabel offset. |
+| `11/` | 11.00, 11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00 | Host modern dengan chain sesuai tabel offset. |
 
 Versi firmware harus cocok dengan offset yang tersedia. Jangan menganggap semua versi di antara angka pada tabel otomatis didukung.
 
