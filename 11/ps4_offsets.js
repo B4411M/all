@@ -410,6 +410,14 @@ export const PS4 = {
     },
 };
 
+PS4["11.52"] = Object.assign({}, PS4["11.50"], {
+    alias_of: "11.50",
+    fw_status: "state=UNTESTED-on-hardware shares=11.50 "
+        + "kernel_rvas=verified-vs-kernel_1150.elf (this firmware) "
+        + "kpatch=1150.bin-10-sites-verified bug=lapse",
+    kpatch: "1150.bin",
+});
+
 // 12.02 IS 12.00 for everything this table describes. The 12.00 block's own
 // fw_status reads "kernel_rvas=verified-vs-kernel_1202.elf" -- those offsets
 // were derived from the 12.02 kernel in the first place. Same WebKit gadgets,
