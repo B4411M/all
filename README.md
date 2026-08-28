@@ -1,8 +1,8 @@
 # B41M 17PlayBox
 
-## Local WebKit Host for PlayStation 4 and PlayStation 5
+## WebKit Host for PlayStation 4 and PlayStation 5
 
-B41M 17PlayBox adalah host web lokal untuk menjalankan workflow WebKit pada browser PlayStation 4 dan PlayStation 5 yang didukung. Beranda utama mendeteksi firmware bila memungkinkan, mengarahkan pengguna ke host yang sesuai, dan menyediakan cache offline setelah resource selesai diunduh.
+B41M 17PlayBox adalah host web untuk menjalankan workflow WebKit pada browser PlayStation 4 dan PlayStation 5 yang didukung. Beranda utama mendeteksi firmware bila memungkinkan, mengarahkan pengguna ke host yang sesuai, dan menyediakan cache offline setelah resource selesai diunduh.
 
 > Gunakan hanya pada perangkat yang Anda miliki atau kelola secara sah. Proses ini dapat menyebabkan crash, reboot, kehilangan data, pembatalan garansi, atau pelanggaran ketentuan layanan.
 
