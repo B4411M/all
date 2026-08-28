@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="id" manifest="cache.manifest">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07120e">
+  <link rel="icon" type="image/png" href="../11/logo.png">
+  <link rel="stylesheet" href="main.css?v=final">
+  <title>B41M 17PlayBox | PS5 Host</title>
+</head>
+<body>
+  <main class="host-shell">
+    <header class="site-header">
+      <div class="brand-lockup">
+        <img src="../11/logo.png" alt="Logo B41M">
+        <div>
+          <div class="eyebrow">B41M 17PLAYBOX // PS5 HOST</div>
+          <h1>SlopKit Jailbreak</h1>
+        </div>
+      </div>
+      <div class="firmware-readout">
+        <span class="readout-label">FIRMWARE TERDETEKSI</span>
+        <strong id="current-fw">Unknown</strong>
+      </div>
+    </header>
+
+    <section class="intro-band" aria-labelledby="page-title">
+      <div>
+        <span class="section-kicker">PS5 / 9.00 - 12.00</span>
+        <h2 id="page-title">Pilih operasi</h2>
+        <p id="top-bar-text">Firmware konsol akan diperiksa sebelum proses dijalankan.</p>
+      </div>
+      <span class="status-chip"><span class="status-dot"></span> HOST SIAP</span>
+    </section>
+
+    <div id="main-content">
+    <div id="pre-jb-view" class="selected">
+      <a tabindex="0" class="action-card primary-action" id="run-jb"
+         href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;v=final">Jailbreak</a>
+      <a tabindex="0" class="action-card secondary-action" id="run-sender"
+         href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;reuse=1&amp;v=final">Payloads (sender)</a>
+    </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-info"><span class="footer-label">[ALAMAT]</span><span class="footer-value">Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</span></div>
+      <div class="footer-info"><span class="footer-label">[KONTAK]</span><span class="footer-value">085555551497</span></div>
+      <div class="footer-info"><span class="footer-label">[COPYRIGHT]</span><span class="footer-value">© 2026 B41M 17PlayBox</span></div>
+      <div class="footer-info"><span class="footer-label">[PEMILIK]</span><span class="footer-value">Ibrahim Yusuf</span></div>
+    </footer>
+  </main>
+
+  <script>
+    try {
+      var firmwareMatch = /PlayStation 5\/(\d+\.\d+)/.exec(navigator.userAgent);
+      var firmware = firmwareMatch ? firmwareMatch[1] : "";
+      document.getElementById("current-fw").textContent = firmware || "Not detected";
+    } catch (e) { }
+    try { document.getElementById("run-jb").focus(); } catch (e) { }
+  </script>
+</body>
+</html>
