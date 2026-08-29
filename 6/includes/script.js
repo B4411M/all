@@ -47,23 +47,23 @@ function stopInterval(){
         clearInterval(timerId);
         timerId = null;
     }
-    label.textContent = "Auto Jailbreak";
+    label.textContent = "Jailbreak Otomatis";
 }
 
 function jailbreakCountdown() {   
     stopInterval();
 
     let countdown = 1;
-    label.textContent = `Auto Jailbreaking in: ${countdown}`;
+    label.textContent = `Jailbreak otomatis dalam: ${countdown}`;
     timerId = setInterval(() => {
         countdown--;
-        label.textContent = `Auto Jailbreaking in: ${countdown}`;
+        label.textContent = `Jailbreak otomatis dalam: ${countdown}`;
 
         if (countdown <= 0) {
             jeilbrekBtn.disabled = true; 
             clearInterval(timerId);
             timerId = null;
-            label.textContent = 'Executing';
+            label.textContent = 'Menjalankan';
             doJb();
         }
     }, 1000);
@@ -90,15 +90,15 @@ function setStatus(element, value, state) {
 
 function updateSystemStatus() {
     if (navigator.onLine) {
-        setStatus(sysStatus, "ONLINE", "success");
+        setStatus(sysStatus, "TERHUBUNG", "success");
     } else {
-        setStatus(sysStatus, "OFFLINE", "error");
+        setStatus(sysStatus, "TERPUTUS", "error");
     }
 }
 
 function updateConnectionStatus() {
     const state = navigator.onLine ? "success" : "error";
-    const text = navigator.onLine ? "SECURE" : "DISCONNECTED";
+    const text = navigator.onLine ? "AMAN" : "TERPUTUS";
     setStatus(connStatus, text, state);
 }
 
@@ -108,14 +108,14 @@ function updateConnectionStatus() {
     if (typeof origDoJb !== "function") return;
 
     window.doJb = async function () {
-        setStatus(exploitStatus, "RUNNING", "warn");
+        setStatus(exploitStatus, "BERJALAN", "warn");
         jeilbrekBtn.disabled = true;
         try {
             await origDoJb.apply(this, arguments);
-            setStatus(exploitStatus, "SUCCESS", "success");
+            setStatus(exploitStatus, "BERHASIL", "success");
         } catch (err) {
             console.error(err);
-            setStatus(exploitStatus, "FAILED", "error");
+            setStatus(exploitStatus, "GAGAL", "error");
         } finally {
             jeilbrekBtn.disabled = false;
         }

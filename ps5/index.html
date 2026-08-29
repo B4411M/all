@@ -14,13 +14,13 @@
       <div class="brand-lockup">
         <img src="../11/logo.png" alt="Logo B41M">
         <div>
-          <div class="eyebrow">B41M 17PLAYBOX // PS5 HOST</div>
-          <h1>SlopKit Jailbreak</h1>
+          <div class="eyebrow">B41M 17PLAYBOX // HOST PS5</div>
+          <h1>Jailbreak SlopKit</h1>
         </div>
       </div>
       <div class="firmware-readout">
         <span class="readout-label">FIRMWARE TERDETEKSI</span>
-        <strong id="current-fw">Unknown</strong>
+        <strong id="current-fw">Belum diketahui</strong>
       </div>
     </header>
 
@@ -38,7 +38,7 @@
       <a tabindex="0" class="action-card primary-action" id="run-jb"
          href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;v=final">Jailbreak</a>
       <a tabindex="0" class="action-card secondary-action" id="run-sender"
-         href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;reuse=1&amp;v=final">Payloads (sender)</a>
+         href="slopkit/poops.html?go=1&amp;auto=1&amp;production=1&amp;trigger=netcontrol&amp;attempts=8&amp;only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&amp;log=debug&amp;payload=1&amp;reuse=1&amp;v=final">Payload (pengirim)</a>
     </div>
     </div>
 
@@ -54,7 +54,7 @@
     try {
       var firmwareMatch = /PlayStation 5\/(\d+\.\d+)/.exec(navigator.userAgent);
       var firmware = firmwareMatch ? firmwareMatch[1] : "";
-      document.getElementById("current-fw").textContent = firmware || "Not detected";
+      document.getElementById("current-fw").textContent = firmware || "Belum terdeteksi";
     } catch (e) { }
     try { document.getElementById("run-jb").focus(); } catch (e) { }
   </script>

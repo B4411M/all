@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" manifest="../cache.manifest">
+<html lang="id" manifest="../cache.manifest">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>slopkit</title>
+<title>SlopKit B41M</title>
 <link rel="preload" href="cat.jpg" as="image">
 <link rel="preload" href="mmhmm-cats-ps5.gif" as="image">
 
@@ -35,12 +35,33 @@
 
 <style>
   html, body { margin: 0; padding: 0; min-height:100%;
-    background: radial-gradient(circle at 50% 28%, #18233a 0, #0c111b 44%, #07090e 100%);
+    background:
+      linear-gradient(rgba(10,14,18,0.76), rgba(10,14,18,0.86)),
+      linear-gradient(180deg, rgba(206,17,38,0.20) 0 50%, rgba(255,255,255,0.16) 50% 100%),
+      radial-gradient(circle at 50% 28%, #18233a 0, #0c111b 44%, #07090e 100%);
     color: #d8dee9; }
   body { box-sizing:border-box; min-height:100vh;
     font: 22px/1.35 "Consolas", "DejaVu Sans Mono", monospace;
     padding: 24px 20px; display:flex; flex-direction:column;
     align-items:center; justify-content:center; }
+  body::before {
+    content:""; position:fixed; inset:-12% -8%; pointer-events:none; z-index:0;
+    background:linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
+    filter: blur(18px) saturate(1.35);
+    opacity:0.9;
+    transform: scale(1.18) rotate(-6deg);
+    animation: flagShadowDrift 16s ease-in-out infinite alternate;
+  }
+  body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+    opacity:0.8;
+  }
+  @keyframes flagShadowDrift {
+    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
+  }
   h1 { font-size: 30px; margin: 0 0 2px; color: #eceff4; font-weight: 600; }
   .sub { font-size: 18px; color: #7c8795; margin: 0 0 12px; }
   #stage { font-size: 24px; padding: 9px 13px; border-radius: 6px;

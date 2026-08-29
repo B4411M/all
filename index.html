@@ -9,8 +9,29 @@
   <style>
     :root { color-scheme: dark; --green:#42f59c; --muted:#95b5a5; --panel:#0b1c16; }
     * { box-sizing:border-box; }
-    body { min-height:100vh; margin:0; display:grid; place-items:center; padding:24px; color:#edfdf4; background:#040906; font:16px/1.5 Arial, sans-serif; }
-    body::before { content:""; position:fixed; inset:0; z-index:-1; opacity:.16; background-image:linear-gradient(#2cff8b 1px,transparent 1px),linear-gradient(90deg,#2cff8b 1px,transparent 1px); background-size:38px 38px; mask-image:linear-gradient(to bottom,black,transparent); }
+    body {
+      min-height:100vh; margin:0; display:grid; place-items:center; padding:24px;
+      color:#edfdf4; font:16px/1.5 Arial, sans-serif;
+      background:
+        linear-gradient(rgba(4,9,6,0.72), rgba(4,9,6,0.82)),
+        linear-gradient(180deg, rgba(206,17,38,0.22) 0 50%, rgba(255,255,255,0.18) 50% 100%),
+        linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0.0)),
+        #040906;
+    }
+    body::before {
+      content:""; position:fixed; inset:-12% -8%; z-index:-1; opacity:.92;
+      background:
+        linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
+      filter: blur(18px) saturate(1.35);
+      transform: scale(1.18) rotate(-6deg);
+      animation: flagShadowDrift 16s ease-in-out infinite alternate;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.25), transparent);
+    }
+    @keyframes flagShadowDrift {
+      0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+      50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+      100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
+    }
     main { width:min(100%, 760px); }
     header { text-align:center; margin-bottom:28px; }
     .tag { color:var(--green); font:12px monospace; letter-spacing:.16em; }

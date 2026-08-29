@@ -23,7 +23,10 @@ body::after {
 
 /* --- Matrix Rain Background --- */
 body {
-    background: #0a0a0a;
+    background:
+        linear-gradient(rgba(8, 13, 12, 0.78), rgba(8, 13, 12, 0.84)),
+        linear-gradient(to bottom, rgba(206, 17, 38, 0.14) 0 50%, rgba(255, 255, 255, 0.14) 50% 100%),
+        #0a0a0a;
     color: #c0c0c0;
     margin: 0;
     padding: 20px;
@@ -37,16 +40,21 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
+    inset: -12% -8%;
     pointer-events: none;
     z-index: 0;
+    opacity: 0.92;
+    background: linear-gradient(180deg, rgba(206, 17, 38, 0.62) 0 50%, rgba(255,255,255,0.82) 50% 100%);
+    filter: blur(18px) saturate(1.35);
+    transform: scale(1.18) rotate(-6deg);
+    animation: flagShadowDrift 16s ease-in-out infinite alternate;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.96), rgba(0,0,0,0.28), transparent);
+}
+
+@keyframes flagShadowDrift {
+    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
 }
 
 .change-firmware {

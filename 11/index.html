@@ -4,14 +4,31 @@
     <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>B41M | PS4 Exploit Host</title>
+<title>B41M | Host Exploit PS4</title>
 <style>
   * { box-sizing:border-box; }
   html, body { min-height:100%; margin:0; }
-  body { overflow:hidden; background:#050b0c; color:#d7ebe5;
+  body { overflow:hidden; background:
+         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
+         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
+         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
+         #050b0c; color:#d7ebe5;
          font:15px/1.5 "Segoe UI", Arial, sans-serif; }
   body:before, body:after { content:""; position:fixed; inset:0; pointer-events:none; }
-  body:before { opacity:.22; background-image:linear-gradient(rgba(49,255,166,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(49,255,166,.12) 1px, transparent 1px); background-size:42px 42px; }
+  body:before {
+    opacity:0.9;
+    inset:-12% -8%;
+    background:linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
+    filter: blur(18px) saturate(1.35);
+    transform: scale(1.18) rotate(-6deg);
+    animation: flagShadowDrift 16s ease-in-out infinite alternate;
+    background-size:100% 100%;
+  }
+  @keyframes flagShadowDrift {
+    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
+  }
   body:after { opacity:.35; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px); }
   .matrix { position:fixed; top:0; bottom:0; width:180px; overflow:hidden; opacity:.11; color:#3dff9d; font:12px/1.05 monospace; word-break:break-all; pointer-events:none; }
   .matrix.left { left:20px; } .matrix.right { right:20px; text-align:right; }
@@ -48,9 +65,9 @@
 <div class="matrix left">01001000 01000001 01000011 01001011<br>ROOT ACCESS // B41M<br>10101100 01010011 11001010<br>PAYLOAD READY<br>01101010 11010010 00101101<br>SYSTEM ONLINE // 13.00<br>01010010 00110101 10101001</div>
 <div class="matrix right">B41M // SECURE NODE<br>10011010 00101011 11010100<br>EXPLOIT HOST ONLINE<br>01010101 11001001 00110010<br>PS4 // WEBKIT // CORE<br>10100110 01010110 10110001</div>
 <main id="shell">
-  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">PS4 EXPLOIT HOST · FW 11.00 · 11.50 · 12.00/12.02 · 12.50/12.52 · 13.00</span></div><span class="session">[ ROOT ACCESS / ACTIVE ]</span></header>
+  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">HOST EXPLOIT PS4 · FW 11.00 · 11.50 · 12.00/12.02 · 12.50/12.52 · 13.00</span></div><span class="session">[ AKSES ROOT / AKTIF ]</span></header>
   <section id="wrap" aria-live="polite">
-    <div class="eyebrow">B41M SECURITY CONSOLE</div>
+    <div class="eyebrow">KONSOLE KEAMANAN B41M</div>
     <div id="state">Mendeteksi firmware...</div>
     <div id="det"></div>
     <div id="cache"></div>

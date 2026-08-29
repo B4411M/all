@@ -4,13 +4,29 @@
   <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>B41M | Lapse Chain</title>
+<title>B41M | Rantai Lapse</title>
 <style>
   * { box-sizing:border-box; }
   html, body { height:100%; margin:0; }
-  body { overflow:hidden; background:#050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
+  body { overflow:hidden; background:
+         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
+         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
+         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
+         #050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
   body:before, body:after { content:""; position:fixed; inset:0; pointer-events:none; }
-  body:before { opacity:.2; background-image:linear-gradient(rgba(49,255,166,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(49,255,166,.12) 1px, transparent 1px); background-size:42px 42px; }
+  body:before {
+    opacity:0.9; inset:-12% -8%;
+    background:linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
+    filter: blur(18px) saturate(1.35);
+    transform: scale(1.18) rotate(-6deg);
+    animation: flagShadowDrift 16s ease-in-out infinite alternate;
+    background-size:100% 100%;
+  }
+  @keyframes flagShadowDrift {
+    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
+  }
   body:after { opacity:.3; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px); }
   .matrix { position:fixed; top:0; bottom:0; width:145px; overflow:hidden; opacity:.1; color:#3dff9d; font:11px/1.08 monospace; word-break:break-all; pointer-events:none; }
   .matrix.left { left:18px; } .matrix.right { right:18px; text-align:right; }
@@ -40,8 +56,8 @@
 <div class="matrix left">01001000 01000001 01000011<br>LAPSE // B41M // ROOT<br>10101100 01010011 11001010<br>KERNEL ACCESS<br>01101010 11010010 00101101</div>
 <div class="matrix right">B41M // SECURE NODE<br>10011010 00101011 11010100<br>WEBKIT // LAPSE<br>01010101 11001001 00110010</div>
 <main id="shell">
-  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">LAPSE CHAIN · EXECUTION CONSOLE</span></div><span class="session">[ CHAIN ACTIVE ]</span></header>
-  <section id="wrap" aria-live="polite"><div class="eyebrow">EXECUTION LOG / LAPSE</div><div id="state">Memuat chain Lapse...</div><div id="out"></div></section>
+  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">RANTAI LAPSE · KONSOL EKSEKUSI</span></div><span class="session">[ RANTAI AKTIF ]</span></header>
+  <section id="wrap" aria-live="polite"><div class="eyebrow">LOG EKSEKUSI / LAPSE</div><div id="state">Memuat rantai Lapse...</div><div id="out"></div></section>
   <footer class="footer site-footer">
     <div class="footer-info"><span class="footer-label">[ALAMAT]</span> <span class="footer-value">Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</span></div>
     <div class="footer-info"><span class="footer-label">[KONTAK]</span> <span class="footer-value">085555551497</span></div>

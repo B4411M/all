@@ -26,13 +26,30 @@ body {
 body::before {
   content: "";
   position: fixed;
+  inset: -12% -8%;
+  z-index: -1;
+  opacity: 0.92;
+  background: linear-gradient(180deg, rgba(206, 17, 38, 0.62) 0 50%, rgba(255,255,255,0.8) 50% 100%);
+  filter: blur(18px) saturate(1.35);
+  transform: scale(1.18) rotate(-6deg);
+  animation: flagShadowDrift 16s ease-in-out infinite alternate;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.95), rgba(0,0,0,.25), transparent);
+}
+
+body::after {
+  content: "";
+  position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: .16;
-  background-image: linear-gradient(#2cff8b 1px, transparent 1px),
-    linear-gradient(90deg, #2cff8b 1px, transparent 1px);
-  background-size: 38px 38px;
-  mask-image: linear-gradient(to bottom, black, transparent);
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+  opacity: .9;
+}
+
+@keyframes flagShadowDrift {
+  0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
+  50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
+  100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
 }
 
 .host-shell { width: min(100%, 820px); margin: 0 auto; }
