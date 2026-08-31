@@ -1,45 +1,39 @@
 CACHE MANIFEST
-# 20260829-181549
-document/en/ps5/index.html #b25346ce7fc7bfe320be3be0f303aa1ed1d0859b3b7599d609bd078ff40a3b21
-index.html #2c93fdce449a2112309fffbb44da0e895f4b15a4b7bc91134a8cace35a27b227
-main.css #43b208859ff9bbed3f9e5950b97c75405fc974bdb91f8a8ed734cb242bdb1a6d
-offsets/10.00.js #c94d0154a6486ad64013fe03c6aeaf6ce86e14b4754ddf79f0a1821fab29ead3
-offsets/10.01.js #21f1b4c96df9e5b698012eb096369e2f79c65e75b70b2e725ebab4485869d865
-offsets/10.20.js #c25371b79948034a26ca04e86fd2784e9c284e2db267384a6ff991113e8c7986
-offsets/10.40.js #8d0a6108087fd30716526a84d69f37861571d72199bcd9f099ebd1d5d6276f01
-offsets/10.60.js #4e50c8c583a27d8e53e66ce077e1c3d27c3e8b96536132059c302c003f0bc582
-offsets/11.00.js #918bc405ac2e45add1b5ccc413102dc86b276852245d3625d7a8972990dc271e
-offsets/11.20.js #9bad61a2ecb71cb0bac6855d1f47b6636e73c5efb84909588ce3ee99d77fe5c8
-offsets/11.40.js #8c0c8a83802338bd9ed9718682641b749163980edb20271c798d6173794cda55
-offsets/11.60.js #5c3d550f4bb08cb0346894753286182a51e70e3efe4051d65547d09afab9e919
-offsets/12.00.js #a93128805b0d31c9d1f2dedd88246210547dc7f7e713d02816151ecc7e9bfd44
-offsets/9.00.js #88af5cfeb5e89828916004a008d4ede1a2f27d80d1d44e1bf423611f9bc5e6f4
-offsets/9.05.js #f96d30be97cea71d441dc641c327b9ee9bb019093e85dccec20730130b38abf4
-offsets/9.20.js #fdd7aef45b6a7726a84251918e29499ef9d981a961af3b4f3585cf381ece3f66
-offsets/9.40.js #6ce2a9f76c414ecf00757793efd1ee7e97ec5cd9aaf571818ec4055b5d251000
-offsets/9.60.js #15997e22d5ac6387e1fc8abf28d1cc5982283bccb2084acc7995129387a5a037
-payloads/PLK.elf #05617c69ea145d1c11b8f7a6b7d3bd9e6df3831afd25d71a4ac85d63fb8e28aa
-payloads/elfldr-ps5-1360.elf #de5dd480d12637527ba2d75e35de851adbb59c455293fa32588c492ef6b44b81
-payloads/ftpsrv-ps5.elf #c580f0534ac6349dc5a4a5c656eaced537b4c2b18da51886d943cea6393436c8
-payloads/gdbsrv-ps5.elf #80952d75f423768b95385f0944e5a5c2f417dcc10c22c1bb6516a923ad8894e5
-payloads/kexp_2026_05_25.bin #7cfb3a8cb86db67893c360ae3531f460f800e9f24039797038e6e81fc50f18a9
-payloads/klogsrv-ps5.elf #e828ec144231f81547cb58bc7d2c396fa984be0c2295f31364b58017816dcceb
-payloads/kstuff.elf #b1dfe57f367a35374f605127915eda38c76a6ed5d1c729e427955798bd78c66a
-payloads/shadowmountplus.elf #a35246fb3bb6042b25653b51cdcbc33254b40339342bf1d2dd0d2eceee2ca526
-payloads/shsrv-ps5.elf #fa4ccb2587bb61be317df0d001f668b17ebf9b4aafad87acf691b1fb8da0bd2d
-payloads/websrv-ps5.elf #54730c867c6e1148536fdcb370e63a7762d989ea87b62488ad4caff64d43f263
-slopkit/core.js #6035f2d8646e48073a65fef648a1d70a1504ce4e82ff5ea02431d7866e468000
-slopkit/int64.js #a79a3334a3f2c75b9a238ab1093796e326251c97ac5d02663eae5b14bf80f652
-slopkit/main.js #450ad6a8a6b65a6df75e335934894d7806cb9503e4d68d0dd8353e8839781e59
-slopkit/mem.js #f5d6c9d689d7fea2ad3644ba29b36634c0ee619ebb82dbedecb62302b05ee6cb
-slopkit/poops.html #e58bb2745c6bfd421904e40b00fc01fbbe003a1a44c8391de24f91cfbc8616e0
-slopkit/poops.js #966e71f68e537740c7aee516a1df1bed513e38ad251d99f4472c1c1a35ad048b
-slopkit/rop.js #489e71f9b9c2100e4061371abb89ff46ad251006418cb57bb34d92416368ec04
-slopkit/rop_slave.js #a207ab667350701f71378587814de16526fd449bae12d40a513ae067c1f50a04
-slopkit/syscalls.js #99767fd55c46d529a6f347778185092a38461b91e60414c2f22379b520479c0e
-
-NETWORK:
-*
-
-FALLBACK:
-index.html index.html
+# build 20260831-223206
+index.html
+main.css
+payloads/ftpsrv-ps5.elf
+payloads/shadowmountplus.elf
+payloads/PLK.elf
+payloads/kstuff.elf
+payloads/klogsrv-ps5.elf
+payloads/kexp_2026_05_25.bin
+payloads/gdbsrv-ps5.elf
+payloads/shsrv-ps5.elf
+payloads/elfldr-ps5-1360.elf
+payloads/websrv-ps5.elf
+document/en/ps5/index.html
+slopkit/int64.js
+slopkit/poops.html
+slopkit/core.js
+slopkit/rop.js
+slopkit/syscalls.js
+slopkit/main.js
+slopkit/rop_slave.js
+slopkit/poops.js
+slopkit/mem.js
+offsets/10.00.js
+offsets/10.20.js
+offsets/12.00.js
+offsets/10.60.js
+offsets/10.40.js
+offsets/10.01.js
+offsets/11.20.js
+offsets/9.40.js
+offsets/9.60.js
+offsets/9.05.js
+offsets/11.00.js
+offsets/11.40.js
+offsets/9.20.js
+offsets/9.00.js
+offsets/11.60.js

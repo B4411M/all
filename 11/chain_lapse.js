@@ -3806,7 +3806,7 @@ function makeRpc(worker) {
                     : "") + ". See the stage 8/9/10 marks for what is left.");
             try {
                 stateEl.textContent = payloadRunning
-                    ? "ALL DONE"
+                    ? "SELESAI"
                     : kpatched ? "ROOT + KERNEL PATCHED -- NO REBOOT"
                     : jailbroken ? "ROOT -- NO REBOOT NEEDED"
                     : "REPAIRED -- NO REBOOT NEEDED";

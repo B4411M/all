@@ -92,7 +92,6 @@
       var status = document.getElementById("cache-status");
       var choices = document.querySelectorAll(".choices a");
       var changeButton = document.getElementById("change-choice");
-      var request = new URLSearchParams(location.search);
       var savedChoice, detectedFirmware;
       var supportedFirmware = {
         "11.00": "11/index.html", "11.50": "11/index.html",
@@ -100,13 +99,18 @@
         "12.50": "11/index.html", "12.52": "11/index.html",
         "13.00": "11/index.html"
       };
-      var legacyFirmware = /^(6|7|8|9|10)\\./;
+      var legacyFirmware = /^(6|7|8|9|10)\./;
 
       function detectFirmware() {
-        var match = /PlayStation\\s+4[\\/ ](\\d+)\\.(\\d+)/.exec(navigator.userAgent);
+        var match = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
         if (!match) return null;
-        var minor = parseInt(match[2], 16).toString(16).padStart(2, "0");
+        var minor = match[2];
+        if (minor.length < 2) minor = "0" + minor;
         return match[1] + "." + minor;
+      }
+
+      function hasChangeRequest() {
+        return /(?:^|&)change=1(?:&|$)/.test(location.search.substring(1));
       }
 
       detectedFirmware = detectFirmware();
@@ -131,7 +135,7 @@
         savedChoice = renamedHosts[savedChoice];
         try { localStorage.setItem(choiceKey, savedChoice); } catch (e) {}
       }
-      if (request.get("change") === "1") {
+      if (hasChangeRequest()) {
         try { localStorage.removeItem(choiceKey); } catch (e) {}
         savedChoice = null;
         try { history.replaceState(null, document.title, "index.html"); } catch (e) {}
@@ -145,7 +149,10 @@
         if (savedChoice) location.replace(savedChoice);
       }
       function cacheReady() {
-        if (!savedChoice) return;
+        if (!savedChoice) {
+          message("Cache offline siap — silakan pilih host firmware.", true);
+          return;
+        }
         message("Cache offline siap — membuka host untuk firmware " + (detectedFirmware || "yang dipilih") + "...", true);
         try { localStorage.setItem(choiceKey, savedChoice); } catch (e) {}
         window.setTimeout(openSavedChoice, 450);
@@ -173,7 +180,10 @@
       }
 
       var cache = window.applicationCache;
-      if (!cache) { cacheReady(); return; }
+      if (!cache || !document.documentElement.hasAttribute("manifest")) {
+        cacheReady();
+        return;
+      }
       if (!navigator.onLine || cache.status === cache.IDLE) { cacheReady(); return; }
       cache.addEventListener("downloading", function () { message("Mengunduh cache offline...", false); }, false);
       cache.addEventListener("progress", function (event) {
