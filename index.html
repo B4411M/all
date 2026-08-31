@@ -63,16 +63,16 @@
 
     <section class="choices" aria-label="Host firmware">
       <a href="6/index.html">
-        <div class="range">6.00 – 10.50</div>
+        <div class="range">6.00 – 11.02</div>
         <h2>WebKit Legacy</h2>
         <p class="desc">Host untuk firmware PS4 6.00 sampai 10.50, dengan pilihan chain NetCtrl atau Lapse.</p>
         <span class="open">HOST TERSEDIA</span>
       </a>
 
       <a href="11/index.html">
-        <div class="range">11.00 – 13.00</div>
+        <div class="range">11.50 – 13.02</div>
         <h2>WebKit Modern</h2>
-        <p class="desc">Host untuk firmware 11.00 sampai 13.00. Metode dipilih otomatis berdasarkan firmware yang terdeteksi.</p>
+        <p class="desc">Host untuk firmware 11.00 sampai 13.02 (11.00, 11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00, 13.02). Metode dipilih otomatis berdasarkan firmware yang terdeteksi.</p>
         <span class="open">HOST TERSEDIA</span>
       </a>
     </section>
@@ -94,10 +94,10 @@
       var changeButton = document.getElementById("change-choice");
       var savedChoice, detectedFirmware;
       var supportedFirmware = {
-        "11.00": "11/index.html", "11.50": "11/index.html",
+        "11.00": "11/index.html", "11.50": "11/index.html", "11.52": "11/index.html",
         "12.00": "11/index.html", "12.02": "11/index.html",
         "12.50": "11/index.html", "12.52": "11/index.html",
-        "13.00": "11/index.html"
+        "13.00": "11/index.html", "13.02": "11/index.html"
       };
       var legacyFirmware = /^(6|7|8|9|10)\./;
 
