@@ -444,6 +444,15 @@ PS4["12.52"] = Object.assign({}, PS4["12.50"], {
     kpatch: "1250.bin",
 });
 
+PS4["13.02"] = Object.assign({}, PS4["13.00"], {
+    alias_of: "13.00",
+    fw_status: "state=UNTESTED-on-hardware shares=13.00 "
+        + "webkit=assumed-identical-to-13.00 (no 13.02 module dump) "
+        + "kernel_rvas=asserted-by-supplied-table UNVERIFIED "
+        + "kpatch=1300.bin bug=poops",
+    kpatch: "1300.bin",
+});
+
 PS4["11.52"] = Object.assign({}, PS4["11.50"], {
     alias_of: "11.50",
     fw_status: "state=UNTESTED-on-hardware shares=11.50 "
