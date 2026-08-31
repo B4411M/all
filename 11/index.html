@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" manifest="cache.manifest">
+<html lang="id" manifest="cache-ps4-modern.appcache">
 <head>
     <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
@@ -130,7 +130,7 @@
 
     function waitForTap(msg, action) {
         setState(msg + " — memulai otomatis", "warn");
-        window.setTimeout(action, 0);
+        window.setTimeout(action, 500);
     }
 
     var ac = window.applicationCache;
