@@ -33,6 +33,8 @@
       <span class="status-chip"><span class="status-dot"></span> HOST SIAP</span>
     </section>
 
+    <div id="cache-status" class="cache-status" role="status">Menyiapkan cache offline...</div>
+
     <div id="main-content">
     <div id="pre-jb-view" class="selected">
       <a tabindex="0" class="action-card primary-action" id="run-jb"
@@ -51,12 +53,74 @@
   </main>
 
   <script>
-    try {
-      var firmwareMatch = /PlayStation 5\/(\d+\.\d+)/.exec(navigator.userAgent);
-      var firmware = firmwareMatch ? firmwareMatch[1] : "";
-      document.getElementById("current-fw").textContent = firmware || "Belum terdeteksi";
-    } catch (e) { }
-    try { document.getElementById("run-jb").focus(); } catch (e) { }
+    (function () {
+      var status = document.getElementById("cache-status");
+      var runJb = document.getElementById("run-jb");
+      var runSender = document.getElementById("run-sender");
+      function setStatus(t, cls) { status.textContent = t; status.className = "cache-status" + (cls ? " " + cls : ""); }
+      function lockCards() { if (runJb) runJb.classList.add("cache-locked"); if (runSender) runSender.classList.add("cache-locked"); }
+      function unlockCards() { if (runJb) runJb.classList.remove("cache-locked"); if (runSender) runSender.classList.remove("cache-locked"); }
+      lockCards();
+
+      function firmwareMatch() {
+        try {
+          var m = /PlayStation 5\/(\d+\.\d+)/.exec(navigator.userAgent);
+          if (m) document.getElementById("current-fw").textContent = m[1];
+          else document.getElementById("current-fw").textContent = "Belum terdeteksi";
+        } catch (e) {}
+      }
+      firmwareMatch();
+      try { document.getElementById("run-jb").focus(); } catch (e) {}
+
+      var ac = window.applicationCache;
+      function cacheIsReady() {
+        if (!ac) return false;
+        if (ac.status === ac.UNCACHED || ac.status === ac.OBSOLETE) return false;
+        try { if (typeof ac.length === "number" && ac.length === 0) return false; } catch (e) {}
+        return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
+      }
+      function enableActions() {
+        unlockCards();
+        setStatus("Cache siap — silakan mulai", "ready");
+      }
+
+      if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        unlockCards();
+        setStatus("Aplikasi tidak mendukung cache otomatis", "");
+      } else if (!navigator.onLine) {
+        if (cacheIsReady()) enableActions();
+        else { setStatus("Luring dan cache kosong — silakan sambungkan internet sekali", "failed"); }
+      } else if (cacheIsReady()) {
+        enableActions();
+      } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        enableActions();
+      } else {
+        setStatus("Menyimpan cache host...", "");
+        ac.addEventListener("downloading", function () { setStatus("Mengunduh cache...", ""); }, false);
+        ac.addEventListener("progress", function (e) {
+          if (e && e.total) setStatus("Mengunduh cache: " + Math.round((e.loaded / e.total) * 100) + "%", "");
+        }, false);
+        ac.addEventListener("cached", function () {
+          try { ac.swapCache(); } catch (e) {}
+          enableActions();
+        }, false);
+        ac.addEventListener("updateready", function () {
+          try { ac.swapCache(); } catch (e) {}
+          enableActions();
+        }, false);
+        ac.addEventListener("noupdate", function () {
+          if (cacheIsReady()) enableActions();
+          else { setStatus("Cache masih kosong", "failed"); }
+        }, false);
+        ac.addEventListener("error", function () {
+          setStatus("Unduhan cache gagal — silakan muat ulang dengan internet", "failed");
+        }, false);
+        ac.addEventListener("obsolete", function () {
+          setStatus("Cache sudah usang", "failed");
+        }, false);
+      }
+    })();
   </script>
 </body>
 </html>

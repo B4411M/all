@@ -22,6 +22,8 @@
   <h1 data-text="B41M 17PlayBox Jailbreak">B41M 17PlayBox Jailbreak</h1>
   <h3 id="UA">> Berjalan pada:</h3>
 
+  <div id="cache-status" class="cache-status" role="status">Menyiapkan cache offline...</div>
+
   <!-- Status Dashboard -->
   <div class="status-dashboard">
     <div class="status-item">
@@ -91,6 +93,62 @@
 
   <script src="src/main.js"></script>
   <script src="includes/script.js"></script>
+  <script>
+    (function () {
+      var status = document.getElementById("cache-status");
+      var btn = document.getElementById("jeilbrek");
+      function setStatus(t, cls) { status.textContent = t; status.className = "cache-status" + (cls ? " " + cls : ""); }
+      function lockBtn() { if (btn) btn.classList.add("cache-locked"); }
+      function unlockBtn() { if (btn) btn.classList.remove("cache-locked"); }
+      lockBtn();
+
+      var ac = window.applicationCache;
+      function cacheIsReady() {
+        if (!ac) return false;
+        if (ac.status === ac.UNCACHED || ac.status === ac.OBSOLETE) return false;
+        try { if (typeof ac.length === "number" && ac.length === 0) return false; } catch (e) {}
+        return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
+      }
+      function enable() { unlockBtn(); setStatus("Cache siap — silakan mulai jailbreak", "ready"); }
+
+      if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        unlockBtn();
+        setStatus("Aplikasi tidak mendukung cache otomatis", "");
+      } else if (!navigator.onLine) {
+        if (cacheIsReady()) enable();
+        else setStatus("Luring dan cache kosong — silakan sambungkan internet sekali", "failed");
+      } else if (cacheIsReady()) {
+        enable();
+      } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        enable();
+      } else {
+        setStatus("Menyimpan cache host...", "");
+        ac.addEventListener("downloading", function () { setStatus("Mengunduh cache...", ""); }, false);
+        ac.addEventListener("progress", function (e) {
+          if (e && e.total) setStatus("Mengunduh cache: " + Math.round((e.loaded / e.total) * 100) + "%", "");
+        }, false);
+        ac.addEventListener("cached", function () {
+          try { ac.swapCache(); } catch (e) {}
+          enable();
+        }, false);
+        ac.addEventListener("updateready", function () {
+          try { ac.swapCache(); } catch (e) {}
+          enable();
+        }, false);
+        ac.addEventListener("noupdate", function () {
+          if (cacheIsReady()) enable();
+          else setStatus("Cache masih kosong", "failed");
+        }, false);
+        ac.addEventListener("error", function () {
+          setStatus("Unduhan cache gagal — silakan muat ulang dengan internet", "failed");
+        }, false);
+        ac.addEventListener("obsolete", function () {
+          setStatus("Cache sudah usang", "failed");
+        }, false);
+      }
+    })();
+  </script>
 </body>
 
 </html>

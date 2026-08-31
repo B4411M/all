@@ -235,6 +235,28 @@ hr {
     text-shadow: none;
 }
 
+/* --- Cache Status --- */
+.cache-status {
+    min-height: 22px;
+    margin: 12px auto;
+    color: #88aa88;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.cache-status.ready { color: #00ff41; }
+.cache-status.failed { color: #ff897d; }
+button.cache-locked, button.cache-locked:hover {
+    color: #335533;
+    border-color: #1f3a26;
+    cursor: not-allowed;
+    text-shadow: none;
+    box-shadow: none;
+    background: transparent;
+}
+button.cache-locked::before { display: none; }
+
 /* --- Button Container --- */
 .btn-container {
     margin: 15px 0 20px 0;

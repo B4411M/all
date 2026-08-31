@@ -145,17 +145,68 @@
         status.textContent = text;
         status.className = "cache-status" + (ready ? " ready" : "");
       }
-      function openSavedChoice() {
-        if (savedChoice) location.replace(savedChoice);
+
+      var navigating = false;
+      function navigateTo(href) {
+        if (navigating) return;
+        navigating = true;
+        var dotTimer = null;
+        message("Cache siap — membuka host...", true);
+        if (dotTimer) clearInterval(dotTimer);
+        window.setTimeout(function () { location.replace(href); }, 300);
       }
-      function cacheReady() {
+
+      function openSavedChoice() {
         if (!savedChoice) {
           message("Cache offline siap — silakan pilih host firmware.", true);
           return;
         }
-        message("Cache offline siap — membuka host untuk firmware " + (detectedFirmware || "yang dipilih") + "...", true);
-        try { localStorage.setItem(choiceKey, savedChoice); } catch (e) {}
-        window.setTimeout(openSavedChoice, 450);
+        navigateTo(savedChoice);
+      }
+
+      function cacheReady() {
+        try { localStorage.setItem(choiceKey, savedChoice || ""); } catch (e) {}
+        openSavedChoice();
+      }
+
+      // Wait until the manifest for the *target* host page has been fully fetched.
+      // The host's own index.html then takes over and pre-caches its chain files.
+      // We pre-arm by navigating into the host so its appcache begins downloading
+      // in the background. The host's own UI handles its progress display.
+      function prefetchAndNavigate(href) {
+        var ac = window.applicationCache;
+        if (!ac || !document.documentElement.hasAttribute("manifest")) {
+          navigateTo(href);
+          return;
+        }
+        // The root selector only caches the four host index.html pages.
+        // Once those are in appcache, navigating to one will trigger THAT
+        // host's manifest to begin downloading. We treat 'cached' / 'noupdate'
+        // / 'updateready' on the root group as "selector is ready", then
+        // navigate. The destination host's own appcache then takes over.
+        if (ac.status === ac.CHECKING || ac.status === ac.DOWNLOADING) {
+          message("Menyelesaikan unduhan cache sebelum membuka host...", false);
+          var done = function () {
+            ac.removeEventListener("cached", done);
+            ac.removeEventListener("noupdate", done);
+            ac.removeEventListener("updateready", done);
+            navigateTo(href);
+          };
+          ac.addEventListener("cached", done, false);
+          ac.addEventListener("noupdate", done, false);
+          ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            done();
+          }, false);
+          ac.addEventListener("error", function () {
+            ac.removeEventListener("cached", done);
+            ac.removeEventListener("noupdate", done);
+            message("Unduhan cache gagal — membuka host dengan cache yang ada.", false);
+            window.setTimeout(function () { navigateTo(href); }, 400);
+          }, false);
+          return;
+        }
+        navigateTo(href);
       }
 
       for (var i = 0; i < choices.length; i++) {
@@ -164,7 +215,7 @@
           try { localStorage.setItem(choiceKey, href); } catch (e) {}
           event.preventDefault();
           event.stopPropagation();
-          location.assign(href);
+          prefetchAndNavigate(href);
         });
       }
       changeButton.addEventListener("click", function () {
@@ -180,11 +231,30 @@
       }
 
       var cache = window.applicationCache;
+      function rootCacheReady() {
+        // Status IDLE is not enough on its own -- it can mean "never cached".
+        // Treat any non-UNCACHED, non-OBSOLETE status with at least one entry
+        // as ready.
+        if (!cache) return true;
+        if (cache.status === cache.UNCACHED || cache.status === cache.OBSOLETE) return false;
+        try { if (typeof cache.length === "number" && cache.length === 0) return false; } catch (e) {}
+        return cache.status === cache.IDLE || cache.status === cache.UPDATEREADY;
+      }
       if (!cache || !document.documentElement.hasAttribute("manifest")) {
         cacheReady();
         return;
       }
-      if (!navigator.onLine || cache.status === cache.IDLE) { cacheReady(); return; }
+      if (!navigator.onLine) {
+        if (rootCacheReady()) cacheReady();
+        else message("Luring dan cache kosong — silakan sambungkan internet sekali", false);
+        return;
+      }
+      if (cache.status === cache.UPDATEREADY) {
+        try { cache.swapCache(); } catch (e) {}
+        cacheReady();
+        return;
+      }
+      if (cache.status === cache.IDLE && rootCacheReady()) { cacheReady(); return; }
       cache.addEventListener("downloading", function () { message("Mengunduh cache offline...", false); }, false);
       cache.addEventListener("progress", function (event) {
         if (event.total) message("Mengunduh cache offline: " + Math.round(event.loaded / event.total * 100) + "%", false);

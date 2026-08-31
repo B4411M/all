@@ -73,6 +73,14 @@ h1 { margin-top: 4px; font: 800 clamp(25px, 5vw, 38px)/1.1 Menlo, Monaco, monosp
 .action-card::before { content: "EXECUTE /"; position: absolute; top: 22px; left: 24px; color: var(--faint); font: 700 11px Menlo, Monaco, monospace; letter-spacing: .12em; }
 .action-card::after { content: "->"; position: absolute; right: 24px; top: 18px; color: var(--green); font: 700 24px Menlo, Monaco, monospace; }
 .action-card:hover, .action-card:focus { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 12px 35px #0008, 0 0 20px #35ef8c2b; outline: none; }
+.action-card.cache-locked, .action-card.cache-locked:hover, .action-card.cache-locked:focus {
+  opacity: .42; cursor: not-allowed; transform: none;
+  border-color: var(--line); box-shadow: none;
+}
+.action-card.cache-locked::after { content: "[cache]"; color: var(--faint); }
+.cache-status { min-height: 22px; margin: 0 0 16px; color: var(--muted); text-align: center; font: 12px/1.4 Menlo, Monaco, monospace; letter-spacing: 1px; }
+.cache-status.ready { color: var(--green); }
+.cache-status.failed { color: #ff897d; }
 .primary-action { color: var(--green-soft); font: 800 28px Menlo, Monaco, monospace; }
 .secondary-action { color: var(--ink); font: 800 22px Menlo, Monaco, monospace; }
 .site-footer { margin-top: 24px; padding: 15px 10px; border-top: 1px solid #193c2c; color: #556b55; font: 11px/1.5 Menlo, Monaco, monospace; letter-spacing: 1px; text-align: center; }

@@ -134,19 +134,40 @@
     }
 
     var ac = window.applicationCache;
+    function cacheIsReady() {
+        // IDLE alone is not enough -- it can mean "never cached".
+        // UNCACHED (0) means this browser has no appcache at all for this page.
+        if (!ac) return false;
+        if (ac.status === ac.UNCACHED) return false;
+        // OBSOLETE means the manifest was removed server-side; treat as not-ready.
+        if (ac.status === ac.OBSOLETE) return false;
+        // length() is the number of cached resources. If the host has never
+        // been cached at all, length is 0 even when status is IDLE.
+        try { if (typeof ac.length === "number" && ac.length === 0) return false; }
+        catch (e) {}
+        return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
+    }
+
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        go();
+        setState("Aplikasi tidak mendukung cache otomatis", "bad");
+        waitForTap("Tetap menjalankan tanpa cache", go);
     } else if (!navigator.onLine) {
-        setCache("Mode luring — dimuat dari cache", true);
-        go();
-    } else if (ac.status === ac.IDLE) {
-        setCache("Cache siap digunakan", true);
-        go();
+        if (cacheIsReady()) {
+            setCache("Mode luring — cache siap", true);
+            go();
+        } else {
+            setCache("Luring dan cache kosong", false);
+            setState("Cache kosong — tidak dapat menjalankan", "bad");
+            waitForTap("Tetap mencoba (mungkin gagal)", go);
+        }
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("Pembaruan telah diunduh", true);
         waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
                    function () { location.reload(); });
+    } else if (cacheIsReady()) {
+        setCache("Cache siap digunakan", true);
+        go();
     } else {
         setCache("Memeriksa cache...");
         ac.addEventListener("downloading",
@@ -168,15 +189,21 @@
         }, false);
 
         ac.addEventListener("noupdate", function () {
-            setCache("Cache siap — mode luring tersedia", true);
-            go();
+            if (cacheIsReady()) {
+                setCache("Cache siap — mode luring tersedia", true);
+                go();
+            } else {
+                setCache("Cache masih kosong", false);
+                waitForTap("TETAP MENJALANKAN (mungkin gagal)", go);
+            }
         }, false);
         ac.addEventListener("error", function () {
-            setCache("Cache tidak tersedia");
-            waitForTap("CACHE GAGAL — tetap menjalankan", go);
+            setCache("Cache tidak tersedia", false);
+            setState("Gagal mengunduh cache", "bad");
+            waitForTap("TETAP MENJALANKAN — payload akan diminta via jaringan", go);
         }, false);
         ac.addEventListener("obsolete", function () {
-            setCache("Cache kedaluwarsa");
+            setCache("Cache kedaluwarsa", false);
             waitForTap("CACHE KEDALUWARSA — menjalankan", go);
         }, false);
     }
