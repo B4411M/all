@@ -19,7 +19,7 @@ def generate_cache_manifest(directory_path, include_directory_path=True, include
 
             if args.light_root and os.path.normpath(directory_path) == '.':
                 relative_path = os.path.relpath(file_path, directory_path).replace("\\", "/")
-                if relative_path not in ('index.html', '11/logo.png'):
+                if relative_path not in ('index.html', '6/index.html', '11/index.html', '11/logo.png'):
                     continue
 
             if not include_payloads and 'payload' in root:
