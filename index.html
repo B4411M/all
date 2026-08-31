@@ -152,8 +152,12 @@
       }
 
       for (var i = 0; i < choices.length; i++) {
-        choices[i].addEventListener("click", function () {
-          try { localStorage.setItem(choiceKey, this.getAttribute("href")); } catch (e) {}
+        choices[i].addEventListener("click", function (event) {
+          var href = this.getAttribute("href");
+          try { localStorage.setItem(choiceKey, href); } catch (e) {}
+          event.preventDefault();
+          event.stopPropagation();
+          location.assign(href);
         });
       }
       changeButton.addEventListener("click", function () {
