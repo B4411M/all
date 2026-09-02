@@ -8,41 +8,18 @@
 <style>
   * { box-sizing:border-box; }
   html, body { min-height:100%; margin:0; }
-  body { overflow:hidden; background:
-         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
-         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
-         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
-         #050b0c; color:#d7ebe5;
-         font:15px/1.5 "Segoe UI", Arial, sans-serif; }
-  body:before, body:after { content:""; position:fixed; inset:0; pointer-events:none; }
-  body:before {
-    opacity:0.9;
-    inset:-12% -8%;
-    background:linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
-    filter: blur(18px) saturate(1.35);
-    transform: scale(1.18) rotate(-6deg);
-    animation: flagShadowDrift 16s ease-in-out infinite alternate;
-    background-size:100% 100%;
-  }
-  @keyframes flagShadowDrift {
-    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
-    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
-    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
-  }
-  body:after { opacity:.35; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px); }
-  .matrix { position:fixed; top:0; bottom:0; width:180px; overflow:hidden; opacity:.11; color:#3dff9d; font:12px/1.05 monospace; word-break:break-all; pointer-events:none; }
-  .matrix.left { left:20px; } .matrix.right { right:20px; text-align:right; }
+  body { background:#050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
   #shell { position:relative; z-index:1; min-height:100vh; padding:28px; display:flex; flex-direction:column; }
   #brand { display:flex; align-items:center; padding:0 0 22px; border-bottom:1px solid rgba(96,255,184,.24); }
-  #brand img { width:42px; height:42px; margin-right:13px; border-radius:50%; border:1px solid #42e99c; box-shadow:0 0 18px rgba(50,255,157,.45); }
+  #brand img { width:42px; height:42px; margin-right:13px; border-radius:50%; border:1px solid #42e99c; }
   .brand-copy { position:relative; line-height:1.05; }
-  .brand-name { position:relative; display:block; color:#e8fff4; font:800 25px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; text-shadow:2px 0 #0b6d46, -1px 0 rgba(115,255,190,.8), 0 0 16px rgba(55,255,156,.7); }
-  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; text-shadow:none; }
+  .brand-name { position:relative; display:block; color:#e8fff4; font:800 25px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; }
+  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; }
+  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; }
   .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
   .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
   .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
-  #wrap { width:100%; max-width:760px; margin:auto; padding:32px; background:linear-gradient(135deg, rgba(11,27,26,.96), rgba(5,15,14,.93)); border:1px solid rgba(91,255,177,.32); box-shadow:0 20px 70px rgba(0,0,0,.55), inset 0 0 32px rgba(36,225,137,.035); }
+  #wrap { width:100%; max-width:760px; margin:auto; padding:32px; background:#0b1b1a; border:1px solid rgba(91,255,177,.32); }
   .eyebrow { margin-bottom:11px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
   .eyebrow:before { content:"// "; color:#9effc9; }
   #state { margin:0 0 16px; color:#effff7; font-size:29px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
@@ -52,18 +29,16 @@
   #cache:before { content:"STATUS  "; color:#3fe69a; letter-spacing:.08em; }
   #cache.cacheok { color:#8df2b7; }
   .change-choice { display:inline-block; margin-top:16px; padding:7px 10px; border:1px solid rgba(59,239,152,.42); color:#8df2b7; font:11px monospace; letter-spacing:.06em; text-decoration:none; }
-  .change-choice:hover, .change-choice:focus { border-color:#8df2b7; color:#effff7; outline:none; }
+  .change-choice:focus { border-color:#8df2b7; color:#effff7; outline:none; }
   .ok { color:#8df2b7 !important; } .bad { color:#ff897d !important; } .warn { color:#ffd572 !important; }
   .footer { padding-top:18px; color:#527366; font:10px/1.7 monospace; letter-spacing:.07em; text-align:center; }
   .footer div { display:inline; }
   .footer div + div:before { content:"  ·  "; color:#2f8660; }
   .footer b { color:#39dd91; font-weight:400; }
-  @media (max-width:560px) { #shell { padding:18px; } #wrap { padding:24px 20px; } #state { font-size:22px; } .session { display:none; } .matrix { opacity:.06; width:90px; } }
+  @media (max-width:560px) { #shell { padding:18px; } #wrap { padding:24px 20px; } #state { font-size:22px; } .session { display:none; } }
 </style>
 </head>
 <body>
-<div class="matrix left">01001000 01000001 01000011 01001011<br>ROOT ACCESS // B41M<br>10101100 01010011 11001010<br>PAYLOAD READY<br>01101010 11010010 00101101<br>SYSTEM ONLINE // 13.00<br>01010010 00110101 10101001</div>
-<div class="matrix right">B41M // SECURE NODE<br>10011010 00101011 11010100<br>EXPLOIT HOST ONLINE<br>01010101 11001001 00110010<br>PS4 // WEBKIT // CORE<br>10100110 01010110 10110001</div>
 <main id="shell">
   <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">HOST EXPLOIT PS4 · FW 11.00 · 11.50/11.52 · 12.00/12.02 · 12.50/12.52 · 13.00/13.02</span></div><span class="session">[ AKSES ROOT / AKTIF ]</span></header>
   <section id="wrap" aria-live="polite">

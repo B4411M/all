@@ -8,53 +8,30 @@
 <style>
   * { box-sizing:border-box; }
   html, body { height:100%; margin:0; }
-  body { overflow:hidden; background:
-         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
-         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
-         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
-         #050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
-  body:before, body:after { content:""; position:fixed; inset:0; pointer-events:none; }
-  body:before {
-    opacity:0.9; inset:-12% -8%;
-    background:linear-gradient(180deg, rgba(206,17,38,.72) 0 50%, rgba(255,255,255,.88) 50% 100%);
-    filter: blur(18px) saturate(1.35);
-    transform: scale(1.18) rotate(-6deg);
-    animation: flagShadowDrift 16s ease-in-out infinite alternate;
-    background-size:100% 100%;
-  }
-  @keyframes flagShadowDrift {
-    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
-    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
-    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
-  }
-  body:after { opacity:.3; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px); }
-  .matrix { position:fixed; top:0; bottom:0; width:145px; overflow:hidden; opacity:.1; color:#3dff9d; font:11px/1.08 monospace; word-break:break-all; pointer-events:none; }
-  .matrix.left { left:18px; } .matrix.right { right:18px; text-align:right; }
-  #shell { position:relative; z-index:1; display:flex; flex-direction:column; height:100%; padding:24px 28px 20px; }
+  body { background:#050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
+  #shell { display:flex; flex-direction:column; height:100%; padding:24px 28px 20px; }
   #brand { display:flex; align-items:center; padding:0 0 18px; border-bottom:1px solid rgba(96,255,184,.24); }
-  #brand img { width:40px; height:40px; margin-right:12px; border:1px solid #42e99c; border-radius:50%; box-shadow:0 0 18px rgba(50,255,157,.45); }
+  #brand img { width:40px; height:40px; margin-right:12px; border-radius:50%; border:1px solid #42e99c; }
   .brand-copy { line-height:1.05; }
-  .brand-name { display:block; color:#e8fff4; font:800 23px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; text-shadow:2px 0 #0b6d46, -1px 0 rgba(115,255,190,.8), 0 0 16px rgba(55,255,156,.7); }
-  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; text-shadow:none; }
+  .brand-name { display:block; color:#e8fff4; font:800 23px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; }
+  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; }
+  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; }
   .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
   .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
   .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
-  #wrap { display:flex; flex:1; flex-direction:column; min-height:0; width:100%; max-width:980px; margin:22px auto 0; padding:24px; background:linear-gradient(135deg, rgba(11,27,26,.96), rgba(5,15,14,.93)); border:1px solid rgba(91,255,177,.32); box-shadow:0 20px 70px rgba(0,0,0,.55), inset 0 0 32px rgba(36,225,137,.035); }
+  #wrap { display:flex; flex:1; flex-direction:column; min-height:0; width:100%; max-width:980px; margin:22px auto 0; padding:24px; background:#0b1b1a; border:1px solid rgba(91,255,177,.32); }
   .eyebrow { margin-bottom:9px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
   .eyebrow:before { content:"// "; color:#9effc9; }
   #state { margin:0 0 15px; color:#effff7; font-size:23px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
-  #out { flex:1; min-height:0; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:rgba(1,10,8,.68); color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; }
+  #out { flex:1; min-height:0; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:#010a08; color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; }
   #out:empty:after { content:"Menyiapkan log eksekusi…"; color:#618276; }
   .ok { color:#8df2b7; } .bad { color:#ff897d; } .warn { color:#ffd572; }
   .footer { padding-top:13px; color:#527366; font:10px monospace; letter-spacing:.1em; text-align:center; }
   .footer span { color:#39dd91; }
-  @media (max-width:560px) { #shell { padding:18px; } #wrap { margin-top:16px; padding:18px; } #state { font-size:18px; } .session { display:none; } .matrix { opacity:.05; width:70px; } }
+  @media (max-width:560px) { #shell { padding:18px; } #wrap { margin-top:16px; padding:18px; } #state { font-size:18px; } .session { display:none; } }
 </style>
 </head>
 <body>
-<div class="matrix left">01001000 01000001 01000011<br>LAPSE // B41M // ROOT<br>10101100 01010011 11001010<br>KERNEL ACCESS<br>01101010 11010010 00101101</div>
-<div class="matrix right">B41M // SECURE NODE<br>10011010 00101011 11010100<br>WEBKIT // LAPSE<br>01010101 11001001 00110010</div>
 <main id="shell">
   <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">RANTAI LAPSE · KONSOL EKSEKUSI</span></div><span class="session">[ RANTAI AKTIF ]</span></header>
   <section id="wrap" aria-live="polite"><div class="eyebrow">LOG EKSEKUSI / LAPSE</div><div id="state">Memuat rantai Lapse...</div><div id="out"></div></section>

@@ -2,59 +2,16 @@
    HACKING TERMINAL THEME - PS4 Exploit UI
    ============================================ */
 
-/* --- CRT Scanline Overlay --- */
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 255, 65, 0.03) 2px,
-        rgba(0, 255, 65, 0.03) 4px
-    );
-}
+* { box-sizing: border-box; }
 
-/* --- Matrix Rain Background --- */
 body {
-    background:
-        linear-gradient(rgba(8, 13, 12, 0.78), rgba(8, 13, 12, 0.84)),
-        linear-gradient(to bottom, rgba(206, 17, 38, 0.14) 0 50%, rgba(255, 255, 255, 0.14) 50% 100%),
-        #0a0a0a;
+    background: #0a0a0a;
     color: #c0c0c0;
     margin: 0;
     padding: 20px;
     text-align: center;
     font-family: 'Courier New', 'Consolas', 'Monaco', 'Liberation Mono', monospace;
-    position: relative;
     min-height: 100vh;
-    overflow-x: hidden;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: -12% -8%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.92;
-    background: linear-gradient(180deg, rgba(206, 17, 38, 0.62) 0 50%, rgba(255,255,255,0.82) 50% 100%);
-    filter: blur(18px) saturate(1.35);
-    transform: scale(1.18) rotate(-6deg);
-    animation: flagShadowDrift 16s ease-in-out infinite alternate;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.96), rgba(0,0,0,0.28), transparent);
-}
-
-@keyframes flagShadowDrift {
-    0% { transform: scale(1.12) rotate(-7deg) translate3d(-2%, 0, 0); opacity: .72; }
-    50% { transform: scale(1.2) rotate(-4deg) translate3d(2%, 1.5%, 0); opacity: .92; }
-    100% { transform: scale(1.17) rotate(-8deg) translate3d(-1.5%, -1%, 0); opacity: .8; }
 }
 
 .change-firmware {
@@ -82,7 +39,7 @@ body > * {
     z-index: 1;
 }
 
-/* --- Glitch Title --- */
+/* --- Glitch Title (static for PS4 perf) --- */
 h1 {
     color: #00ff41;
     font-size: 22px;
@@ -90,61 +47,6 @@ h1 {
     font-family: 'Courier New', monospace;
     text-transform: uppercase;
     letter-spacing: 6px;
-    text-shadow:
-        0 0 5px rgba(0, 255, 65, 0.7),
-        0 0 10px rgba(0, 255, 65, 0.5),
-        0 0 20px rgba(0, 255, 65, 0.3),
-        0 0 40px rgba(0, 255, 65, 0.1);
-    animation: glitch 3s infinite;
-    position: relative;
-}
-
-@keyframes glitch {
-    0%, 90%, 100% { transform: translate(0); }
-    92% { transform: translate(-2px, 1px); color: #ff00c1; }
-    94% { transform: translate(2px, -1px); color: #00d4ff; }
-    96% { transform: translate(-1px, 2px); color: #ff00c1; }
-    98% { transform: translate(1px, -2px); color: #00d4ff; }
-}
-
-/* --- Glitch pseudo-elements --- */
-h1::before,
-h1::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-}
-
-h1::before {
-    animation: glitchBefore 3s infinite;
-    color: #ff00c1;
-    clip-path: inset(0 0 70% 0);
-}
-
-h1::after {
-    animation: glitchAfter 3s infinite;
-    color: #00d4ff;
-    clip-path: inset(70% 0 0 0);
-}
-
-@keyframes glitchBefore {
-    0%, 90%, 100% { opacity: 0; transform: translate(0); }
-    92% { opacity: 0.8; transform: translate(-3px, 0); }
-    94% { opacity: 0; }
-    96% { opacity: 0.6; transform: translate(2px, 0); }
-    98% { opacity: 0; }
-}
-
-@keyframes glitchAfter {
-    0%, 90%, 100% { opacity: 0; transform: translate(0); }
-    92% { opacity: 0; }
-    94% { opacity: 0.7; transform: translate(3px, 0); }
-    96% { opacity: 0; }
-    98% { opacity: 0.5; transform: translate(-2px, 0); }
 }
 
 /* --- Subtitle / UA --- */
@@ -558,16 +460,9 @@ button:disabled::before {
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #00ff41, #00d4ff, #00ff41);
-    background-size: 200% 100%;
-    animation: progressGradient 2s linear infinite;
+    background: #00ff41;
     border-radius: 2px;
     transition: width 0.3s;
-}
-
-@keyframes progressGradient {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
 }
 
 /* --- Responsive --- */
