@@ -4,6 +4,7 @@
   <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b0c">
 <title>B41M | Rantai Poops</title>
 <style>
   * { box-sizing:border-box; }
@@ -23,7 +24,7 @@
   .eyebrow { margin-bottom:9px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
   .eyebrow:before { content:"// "; color:#9effc9; }
   #state { margin:0 0 15px; color:#effff7; font-size:23px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
-  #out { flex:1; min-height:0; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:#010a08; color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; }
+  #out { flex:1; min-height:0; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:#010a08; color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; word-break:break-word; }
   #out:empty:after { content:"Menyiapkan log eksekusi…"; color:#618276; }
   .ok { color:#8df2b7; } .bad { color:#ff897d; } .warn { color:#ffd572; }
   .footer { padding-top:13px; color:#527366; font:10px monospace; letter-spacing:.1em; text-align:center; }
@@ -33,7 +34,7 @@
 </head>
 <body>
 <main id="shell">
-  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">RANTAI POOPS · KONSOL EKSEKUSI</span></div><span class="session">[ RANTAI AKTIF ]</span></header>
+  <header id="brand"><img src="logo.png" alt="B41M" onerror="this.style.visibility='hidden'"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">RANTAI POOPS · KONSOL EKSEKUSI</span></div><span class="session">[ RANTAI AKTIF ]</span></header>
   <section id="wrap" aria-live="polite"><div class="eyebrow">LOG EKSEKUSI / POOPS</div><div id="state">Memuat rantai Poops...</div><div id="out"></div></section>
   <footer class="footer site-footer">
     <div class="footer-info"><span class="footer-label">[ALAMAT]</span> <span class="footer-value">Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</span></div>
@@ -42,6 +43,20 @@
     <div class="footer-info"><span class="footer-label">[PEMILIK]</span> <span class="footer-value">Ibrahim Yusuf</span></div>
   </footer>
 </main>
+<script>
+window.addEventListener("error", function (e) {
+    try {
+        var s = document.getElementById("state");
+        if (s) { s.className = "bad"; s.textContent = "Kesalahan: " + (e && e.message ? e.message : "tidak diketahui"); }
+    } catch (_) {}
+}, false);
+window.addEventListener("unhandledrejection", function (e) {
+    try {
+        var s = document.getElementById("state");
+        if (s) { s.className = "bad"; s.textContent = "Gagal memuat modul"; }
+    } catch (_) {}
+}, false);
+</script>
 <script type="module">import "./chain_poops.js";</script>
 </body>
 </html>

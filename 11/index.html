@@ -4,6 +4,7 @@
     <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b0c">
 <title>B41M | Host Exploit PS4</title>
 <style>
   * { box-sizing:border-box; }
@@ -40,7 +41,7 @@
 </head>
 <body>
 <main id="shell">
-  <header id="brand"><img src="logo.png" alt="Logo B41M"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">HOST EXPLOIT PS4 · FW 11.00 · 11.50/11.52 · 12.00/12.02 · 12.50/12.52 · 13.00/13.02</span></div><span class="session">[ AKSES ROOT / AKTIF ]</span></header>
+  <header id="brand"><img src="logo.png" alt="B41M" onerror="this.style.visibility='hidden'"><div class="brand-copy"><span class="brand-name">B41M</span><span class="brand-sub">HOST EXPLOIT PS4 · FW 11.00 · 11.50/11.52 · 12.00/12.02 · 12.50/12.52 · 13.00/13.02</span></div><span class="session">[ AKSES ROOT / AKTIF ]</span></header>
   <section id="wrap" aria-live="polite">
     <div class="eyebrow">KONSOLE KEAMANAN B41M</div>
     <div id="state">Mendeteksi firmware...</div>
@@ -58,122 +59,172 @@
 
 <script>
 (function () {
-    var stateEl = document.getElementById("state");
-    var detEl = document.getElementById("det");
-    var cacheEl = document.getElementById("cache");
-    function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
-    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
-    var params = new URLSearchParams(location.search);
+    "use strict";
+    try {
+        var stateEl = document.getElementById("state");
+        var detEl = document.getElementById("det");
+        var cacheEl = document.getElementById("cache");
+        if (!stateEl || !detEl || !cacheEl) return;
 
-    var key = null, fwnum = null;
-    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
-    if (m) {
-        var minor = parseInt(m[2], 16);
-        var ms = minor.toString(16);
-        if (ms.length < 2) ms = "0" + ms;
-        key = m[1] + "." + ms;
-        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
-    }
-    var bug = null, why = "";
-    var forced = params.get("bug");
-    if (forced === "lapse" || forced === "poops") {
-        bug = forced; why = "dipilih melalui ?bug=" + forced;
-    } else if (!key) {
-        why = "";
-    } else if (fwnum <= 1202) {
-        bug = "lapse"; why = key + " ≤ 12.02";
-    } else if (fwnum >= 1250) {
-        bug = "poops"; why = key + " ≥ 12.50";
-    } else {
-        why = key + " — tidak ada eksploit yang cocok (lapse hingga 12.02, poops mulai 12.50)";
-    }
-    detEl.innerHTML = "Firmware: <b>" + (key || "tidak dapat dideteksi") + "</b>"
-        + " &middot; Metode: <b>" + (bug || "sistem tidak kompatibel") + "</b> &middot; " + why;
-
-    if (!bug) { setState("Firmware tidak kompatibel", "bad"); return; }
-
-    var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html")
-        + location.search;
-    var startQueued = false;
-    function go() {
-        if (startQueued) return;
-        startQueued = true;
-        setCache("Cache siap — memulai chain secara otomatis", true);
-        setState("Memuat rangkaian " + bug + "...", "warn");
-        location.replace(target);
-    }
-
-    function waitForTap(msg, action) {
-        setState(msg + " — memulai otomatis", "warn");
-        window.setTimeout(action, 500);
-    }
-
-    var ac = window.applicationCache;
-    function cacheIsReady() {
-        if (!ac) return false;
-        if (ac.status === ac.UNCACHED || ac.status === ac.OBSOLETE) return false;
-        try { if (typeof ac.length === "number" && ac.length === 0) return false; } catch (e) {}
-        return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
-    }
-
-    if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        setState("Aplikasi tidak mendukung cache otomatis", "bad");
-        waitForTap("Tetap menjalankan tanpa cache", go);
-    } else if (!navigator.onLine) {
-        if (cacheIsReady()) {
-            setCache("Mode luring — cache siap", true);
-            go();
-        } else {
-            setCache("Luring dan cache kosong", false);
-            setState("Cache kosong — tidak dapat menjalankan", "bad");
-            waitForTap("Tetap mencoba (mungkin gagal)", go);
+        function setState(t, c) { try { stateEl.textContent = t; stateEl.className = c || ""; } catch (e) {} }
+        function setCache(t, ok) { try { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; } catch (e) {} }
+        function setDet(fw, bug, why) {
+            try {
+                while (detEl.firstChild) detEl.removeChild(detEl.firstChild);
+                detEl.appendChild(document.createTextNode("Firmware: "));
+                var b1 = document.createElement("b"); b1.textContent = fw; detEl.appendChild(b1);
+                detEl.appendChild(document.createTextNode(" · Metode: "));
+                var b2 = document.createElement("b"); b2.textContent = bug; detEl.appendChild(b2);
+                detEl.appendChild(document.createTextNode(" · " + why));
+            } catch (e) {}
         }
-    } else if (ac.status === ac.UPDATEREADY) {
-        try { ac.swapCache(); } catch (e) {}
-        setCache("Pembaruan telah diunduh", true);
-        waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
-                   function () { location.reload(); });
-    } else if (cacheIsReady()) {
-        setCache("Cache siap digunakan", true);
-        go();
-    } else {
-        setCache("Memeriksa cache...");
-        ac.addEventListener("downloading",
-            function () { setCache("Menyimpan cache untuk mode luring (pertama kali)..."); }, false);
-        ac.addEventListener("progress", function (e) {
-            if (e && e.total)
-                setCache("Menyimpan cache " + Math.round((e.loaded / e.total) * 100) + "%");
-        }, false);
 
-        ac.addEventListener("cached", function () {
-            setCache("Cache luring siap digunakan", true);
-            waitForTap("CACHE SIAP (pertama kali) — menjalankan", go);
-        }, false);
-        ac.addEventListener("updateready", function () {
+        var params = null;
+        try { params = new URLSearchParams(location.search); } catch (e) { params = null; }
+
+        var key = null, fwnum = null;
+        try {
+            var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+            if (m) {
+                var minor = parseInt(m[2], 16);
+                var ms = isFinite(minor) ? minor.toString(16) : "";
+                if (ms.length < 2) ms = "0" + ms;
+                key = m[1] + "." + ms;
+                fwnum = parseInt(m[1], 10) * 100 + (isFinite(minor) ? minor : 0);
+            }
+        } catch (e) {}
+
+        var bug = null, why = "";
+        try {
+            var forced = params && params.get("bug");
+            if (forced === "lapse" || forced === "poops") {
+                bug = forced; why = "dipilih melalui ?bug=" + forced;
+            } else if (!key) {
+                why = "";
+            } else if (fwnum <= 1202) {
+                bug = "lapse"; why = key + " ≤ 12.02";
+            } else if (fwnum >= 1250) {
+                bug = "poops"; why = key + " ≥ 12.50";
+            } else {
+                why = key + " — tidak ada eksploit yang cocok (lapse hingga 12.02, poops mulai 12.50)";
+            }
+        } catch (e) {}
+        setDet(key || "tidak dapat dideteksi", bug || "sistem tidak kompatibel", why);
+
+        if (!bug) { setState("Firmware tidak kompatibel", "bad"); return; }
+
+        var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html") + location.search;
+        var startQueued = false;
+        var goTimer = 0;
+        function cancelGo() { if (goTimer) { try { clearTimeout(goTimer); } catch (e) {} goTimer = 0; } }
+        function go() {
+            if (startQueued) return;
+            startQueued = true;
+            cancelGo();
+            try { acCleanup(); } catch (e) {}
+            try { setCache("Cache siap — memulai chain secara otomatis", true); } catch (e) {}
+            try { setState("Memuat rangkaian " + bug + "...", "warn"); } catch (e) {}
+            try { location.replace(target); } catch (e) {}
+        }
+
+        function waitForTap(msg, action) {
+            try { setState(msg + " — memulai otomatis", "warn"); } catch (e) {}
+            cancelGo();
+            try { goTimer = window.setTimeout(action, 600); } catch (e) {}
+        }
+
+        var ac = null;
+        try { ac = window.applicationCache; } catch (e) { ac = null; }
+        function cacheIsReady() {
+            if (!ac) return false;
+            try {
+                if (ac.status === ac.UNCACHED || ac.status === ac.OBSOLETE) return false;
+                if (typeof ac.length === "number" && ac.length === 0) return false;
+            } catch (e) { return false; }
+            return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
+        }
+
+        var listeners = [];
+        function on(target, ev, fn) {
+            if (!target) return;
+            try { target.addEventListener(ev, fn, false); listeners.push([target, ev, fn]); } catch (e) {}
+        }
+        function acCleanup() {
+            for (var i = 0; i < listeners.length; ++i) {
+                try { listeners[i][0].removeEventListener(listeners[i][1], listeners[i][2], false); } catch (e) {}
+            }
+            listeners = [];
+        }
+        on(window, "pagehide", acCleanup);
+        on(window, "unload", acCleanup);
+
+        try {
+            window.addEventListener("error", function (e) {
+                try { setState("Kesalahan halaman", "bad"); } catch (_) {}
+            }, false);
+        } catch (e) {}
+
+        if (!ac || !document.documentElement.hasAttribute("manifest")) {
+            setState("Aplikasi tidak mendukung cache otomatis", "bad");
+            waitForTap("Tetap menjalankan tanpa cache", go);
+        } else if (!navigator.onLine) {
+            if (cacheIsReady()) {
+                setCache("Mode luring — cache siap", true);
+                go();
+            } else {
+                setCache("Luring dan cache kosong", false);
+                setState("Cache kosong — tidak dapat menjalankan", "bad");
+                waitForTap("Tetap mencoba (mungkin gagal)", go);
+            }
+        } else if (ac.status === ac.UPDATEREADY) {
             try { ac.swapCache(); } catch (e) {}
             setCache("Pembaruan telah diunduh", true);
             waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
-                       function () { location.reload(); });
-        }, false);
+                       function () { try { location.reload(); } catch (e) {} });
+        } else if (cacheIsReady()) {
+            setCache("Cache siap digunakan", true);
+            go();
+        } else {
+            setCache("Memeriksa cache...");
+            on(ac, "downloading",
+                function () { setCache("Menyimpan cache untuk mode luring (pertama kali)..."); });
+            on(ac, "progress", function (e) {
+                if (e && e.total)
+                    setCache("Menyimpan cache " + Math.round((e.loaded / e.total) * 100) + "%");
+            });
 
-        ac.addEventListener("noupdate", function () {
-            if (cacheIsReady()) {
-                setCache("Cache siap — mode luring tersedia", true);
-                go();
-            } else {
-                setCache("Cache masih kosong", false);
-                waitForTap("TETAP MENJALANKAN (mungkin gagal)", go);
-            }
-        }, false);
-        ac.addEventListener("error", function () {
-            setCache("Cache tidak tersedia", false);
-            setState("Gagal mengunduh cache", "bad");
-            waitForTap("TETAP MENJALANKAN — payload akan diminta via jaringan", go);
-        }, false);
-        ac.addEventListener("obsolete", function () {
-            setCache("Cache kedaluwarsa", false);
-            waitForTap("CACHE KEDALUWARSA — menjalankan", go);
-        }, false);
+            on(ac, "cached", function () {
+                setCache("Cache luring siap digunakan", true);
+                waitForTap("CACHE SIAP (pertama kali) — menjalankan", go);
+            });
+            on(ac, "updateready", function () {
+                try { ac.swapCache(); } catch (e) {}
+                setCache("Pembaruan telah diunduh", true);
+                waitForTap("PEMBARUAN SIAP — memuat ulang & menjalankan",
+                           function () { try { location.reload(); } catch (e) {} });
+            });
+
+            on(ac, "noupdate", function () {
+                if (cacheIsReady()) {
+                    setCache("Cache siap — mode luring tersedia", true);
+                    go();
+                } else {
+                    setCache("Cache masih kosong", false);
+                    waitForTap("TETAP MENJALANKAN (mungkin gagal)", go);
+                }
+            });
+            on(ac, "error", function () {
+                setCache("Cache tidak tersedia", false);
+                setState("Gagal mengunduh cache", "bad");
+                waitForTap("TETAP MENJALANKAN — payload akan diminta via jaringan", go);
+            });
+            on(ac, "obsolete", function () {
+                setCache("Cache kedaluwarsa", false);
+                waitForTap("CACHE KEDALUWARSA — menjalankan", go);
+            });
+        }
+    } catch (e) {
+        try { document.getElementById("state").textContent = "Kesalahan inisialisasi"; } catch (_) {}
     }
 })();
 </script>
