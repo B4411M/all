@@ -110,16 +110,9 @@
 
     var ac = window.applicationCache;
     function cacheIsReady() {
-        // IDLE alone is not enough -- it can mean "never cached".
-        // UNCACHED (0) means this browser has no appcache at all for this page.
         if (!ac) return false;
-        if (ac.status === ac.UNCACHED) return false;
-        // OBSOLETE means the manifest was removed server-side; treat as not-ready.
-        if (ac.status === ac.OBSOLETE) return false;
-        // length() is the number of cached resources. If the host has never
-        // been cached at all, length is 0 even when status is IDLE.
-        try { if (typeof ac.length === "number" && ac.length === 0) return false; }
-        catch (e) {}
+        if (ac.status === ac.UNCACHED || ac.status === ac.OBSOLETE) return false;
+        try { if (typeof ac.length === "number" && ac.length === 0) return false; } catch (e) {}
         return ac.status === ac.IDLE || ac.status === ac.UPDATEREADY;
     }
 

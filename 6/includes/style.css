@@ -1,16 +1,11 @@
-/* ============================================
-   HACKING TERMINAL THEME - PS4 Exploit UI
-   ============================================ */
-
 * { box-sizing: border-box; }
-
 body {
     background: #0a0a0a;
     color: #c0c0c0;
     margin: 0;
     padding: 20px;
     text-align: center;
-    font-family: 'Courier New', 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+    font-family: 'Courier New', 'Consolas', monospace;
     min-height: 100vh;
 }
 
@@ -18,150 +13,92 @@ body {
     display: inline-block;
     margin: 6px 0 14px;
     padding: 8px 12px;
-    border: 1px solid rgba(0, 255, 65, 0.45);
+    border: 1px solid #00ff41;
     color: #00ff41;
     font-size: 12px;
     letter-spacing: 1px;
     text-decoration: none;
 }
+.change-firmware:focus { background: #1a2a1a; outline: none; }
 
-.change-firmware:hover,
-.change-firmware:focus {
-    border-color: #00ff41;
-    background: rgba(0, 255, 65, 0.12);
-    color: #dffff0;
-    outline: none;
-}
-
-/* --- All content above background --- */
-body > * {
-    position: relative;
-    z-index: 1;
-}
-
-/* --- Glitch Title (static for PS4 perf) --- */
 h1 {
     color: #00ff41;
     font-size: 22px;
-    margin: 10px 0 5px 0;
-    font-family: 'Courier New', monospace;
+    margin: 10px 0 5px;
     text-transform: uppercase;
     letter-spacing: 6px;
 }
-
-/* --- Subtitle / UA --- */
 h3 {
     color: #00d4ff;
     font-size: 13px;
     font-weight: normal;
-    margin: 5px 0 10px 0;
-    font-family: 'Courier New', monospace;
+    margin: 5px 0 10px;
     letter-spacing: 1px;
-    text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
 }
 
-/* --- ASCII Banner --- */
 .ascii-banner {
     color: #00ff41;
     font-size: 10px;
     line-height: 1.1;
-    letter-spacing: 0;
     margin: 5px auto;
     text-align: center;
     white-space: pre;
     font-family: 'Courier New', monospace;
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.5);
     opacity: 0.85;
 }
 
-/* --- Divider --- */
 hr {
     border: 0;
     border-top: 1px solid #00ff41;
     margin: 10px auto;
     width: 90%;
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
     opacity: 0.5;
 }
 
-/* --- Status Dashboard --- */
 .status-dashboard {
     display: flex;
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
-    margin: 10px auto 15px auto;
+    margin: 10px auto 15px;
     max-width: 700px;
 }
-
 .status-item {
-    background: rgba(0, 255, 65, 0.05);
-    border: 1px solid rgba(0, 255, 65, 0.2);
+    background: #0a1a0a;
+    border: 1px solid #1a3a1a;
     padding: 6px 14px;
     font-size: 11px;
-    font-family: 'Courier New', monospace;
     color: #00ff41;
     letter-spacing: 1px;
     text-transform: uppercase;
     border-radius: 2px;
 }
+.status-item .label { color: #556b55; margin-right: 6px; }
+.status-item .value { color: #00d4ff; }
+.status-item .value[data-state="success"] { color: #00ff41; }
+.status-item .value[data-state="warn"] { color: #ffb000; animation: blink 1s step-end infinite; }
+.status-item .value[data-state="error"] { color: #ff0033; }
+.status-item .value[data-state="idle"] { color: #556b55; }
 
-.status-item .label {
-    color: #556b55;
-    margin-right: 6px;
-}
-
-.status-item .value {
-    color: #00d4ff;
-    text-shadow: 0 0 6px rgba(0, 212, 255, 0.4);
-}
-
-.status-item .value[data-state="success"] {
-    color: #00ff41;
-    text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
-}
-
-.status-item .value[data-state="warn"] {
-    color: #ffb000;
-    text-shadow: 0 0 6px rgba(255, 176, 0, 0.4);
-    animation: blink 1s step-end infinite;
-}
-
-.status-item .value[data-state="error"] {
-    color: #ff0033;
-    text-shadow: 0 0 8px rgba(255, 0, 51, 0.5);
-}
-
-.status-item .value[data-state="idle"] {
-    color: #556b55;
-    text-shadow: none;
-}
-
-/* --- Cache Status --- */
 .cache-status {
     min-height: 22px;
     margin: 12px auto;
     color: #88aa88;
-    font-family: 'Courier New', monospace;
     font-size: 12px;
     letter-spacing: 1px;
-    text-align: center;
 }
 .cache-status.ready { color: #00ff41; }
 .cache-status.failed { color: #ff897d; }
-button.cache-locked, button.cache-locked:hover {
+
+button.cache-locked {
     color: #335533;
     border-color: #1f3a26;
     cursor: not-allowed;
-    text-shadow: none;
-    box-shadow: none;
     background: transparent;
 }
-button.cache-locked::before { display: none; }
 
-/* --- Button Container --- */
 .btn-container {
-    margin: 15px 0 20px 0;
+    margin: 15px 0 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -169,14 +106,12 @@ button.cache-locked::before { display: none; }
     gap: 15px;
 }
 
-/* --- Terminal-style Radio Toggle --- */
 #kernel-options {
-    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(0, 255, 65, 0.03);
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: #0a1a0a;
+    border: 1px solid #1a3a1a;
     padding: 8px 14px;
     border-radius: 3px;
 }
@@ -190,33 +125,20 @@ input[type="radio"] {
     border-radius: 50%;
     background-color: #111;
     cursor: pointer;
-    position: relative;
-    transition: all 0.2s;
+    margin: 0;
 }
-
-input[type="radio"]:checked {
-    border-color: #00ff41;
-    background-color: #00ff41;
-    box-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
-}
+input[type="radio"]:checked { border-color: #00ff41; background-color: #00ff41; }
 
 #kernel-options label {
     color: #88aa88;
-    font-family: 'Courier New', monospace;
     font-size: 12px;
     margin-right: 10px;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: color 0.2s;
 }
+#kernel-options label:focus { color: #00ff41; outline: none; }
 
-#kernel-options label:hover {
-    color: #00ff41;
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
-}
-
-/* --- Main Terminal Button --- */
 button {
     background: transparent;
     color: #00ff41;
@@ -228,80 +150,31 @@ button {
     font-family: 'Courier New', monospace;
     text-transform: uppercase;
     letter-spacing: 3px;
-    position: relative;
-    transition: all 0.3s;
-    overflow: hidden;
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
-    box-shadow:
-        0 0 5px rgba(0, 255, 65, 0.2),
-        inset 0 0 5px rgba(0, 255, 65, 0.05);
 }
-
-button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-    transition: left 0.5s;
-}
-
-button:hover::before {
-    left: 100%;
-}
-
-button:hover {
-    background: rgba(0, 255, 65, 0.08);
-    box-shadow:
-        0 0 15px rgba(0, 255, 65, 0.4),
-        0 0 30px rgba(0, 255, 65, 0.1),
-        inset 0 0 10px rgba(0, 255, 65, 0.1);
-    border-color: #00ff41;
-    color: #00ff41;
-}
-
-button:disabled, button:hover:disabled {
-    background: rgba(255, 0, 0, 0.05);
+button:focus { background: #1a2a1a; outline: none; }
+button:disabled {
+    background: transparent;
     border-color: #553333;
     color: #553333;
     cursor: not-allowed;
-    box-shadow: none;
-    text-shadow: none;
 }
 
-button:disabled::before {
-    display: none;
-}
-
-/* --- Auto Jailbreak Toggle (Terminal Switch) --- */
 .autoJb {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 255, 65, 0.03);
-    border: 1px solid rgba(0, 255, 65, 0.15);
+    background: #0a1a0a;
+    border: 1px solid #1a3a1a;
     padding: 8px 14px;
     border-radius: 3px;
 }
-
 #autoJbLabel {
     color: #88aa88;
-    font-family: 'Courier New', monospace;
     font-size: 11px;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: color 0.2s;
 }
-
-#autoJbLabel:hover {
-    color: #00ff41;
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
-}
-
-/* Checkbox styled as terminal toggle */
 #autoJbInput {
     -webkit-appearance: none;
     appearance: none;
@@ -312,9 +185,9 @@ button:disabled::before {
     border-radius: 9px;
     cursor: pointer;
     position: relative;
-    transition: all 0.3s;
+    margin: 0;
 }
-
+#autoJbInput:checked { background: #1a2a1a; border-color: #00ff41; }
 #autoJbInput::before {
     content: "";
     position: absolute;
@@ -324,26 +197,9 @@ button:disabled::before {
     height: 12px;
     background: #553333;
     border-radius: 50%;
-    transition: all 0.3s;
 }
+#autoJbInput:checked::before { left: 20px; background: #00ff41; }
 
-#autoJbInput:checked {
-    background: rgba(0, 255, 65, 0.15);
-    border-color: #00ff41;
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.3);
-}
-
-#autoJbInput:checked::before {
-    left: 20px;
-    background: #00ff41;
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.6);
-}
-
-.mt-2 {
-    margin-top: 0;
-}
-
-/* --- Main Layout --- */
 .main-layout {
     width: 96%;
     margin: 0 auto;
@@ -351,30 +207,14 @@ button:disabled::before {
     gap: 20px;
     justify-content: space-between;
 }
+.media-box { width: 25%; min-width: 180px; text-align: center; }
+.media-box img { width: 90%; height: auto; border: 1px solid #1a3a1a; border-radius: 2px; }
 
-/* --- Media Box --- */
-.media-box {
-    width: 25%;
-    min-width: 180px;
-    text-align: center;
-}
-
-.media-box img {
-    width: 90%;
-    height: auto;
-    border: 1px solid #1a3a1a;
-    border-radius: 2px;
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.05);
-    filter: grayscale(30%) contrast(110%);
-}
-
-/* --- Terminal Console --- */
 #console {
     width: 70%;
     background: #050505;
     color: #00ff41;
     font-size: 13px;
-    padding: 0;
     text-align: left;
     height: 320px;
     overflow-y: scroll;
@@ -383,15 +223,9 @@ button:disabled::before {
     border-radius: 3px;
     font-family: 'Courier New', 'Consolas', monospace;
     line-height: 1.5;
-    position: relative;
-    box-shadow:
-        0 0 10px rgba(0, 255, 65, 0.05),
-        inset 0 0 20px rgba(0, 0, 0, 0.8);
 }
-
-/* Console Header Bar */
 #console::before {
-    content: "▼ TERMINAL — v4.0.1 [PS4 EXPLOIT]";
+    content: "TERMINAL v4.0.1 [PS4 EXPLOIT]";
     display: block;
     background: #0d1a0d;
     color: #00ff41;
@@ -400,38 +234,16 @@ button:disabled::before {
     border-bottom: 1px solid #1a3a1a;
     letter-spacing: 2px;
     text-transform: uppercase;
-    font-family: 'Courier New', monospace;
     position: sticky;
     top: 0;
     z-index: 2;
-    text-shadow: 0 0 4px rgba(0, 255, 65, 0.3);
 }
+#console-content { padding: 12px 15px; min-height: 260px; }
 
-/* Console content padding */
-#console-content {
-    padding: 12px 15px;
-    min-height: 260px;
-}
+#console::-webkit-scrollbar { width: 6px; }
+#console::-webkit-scrollbar-track { background: #0a0a0a; }
+#console::-webkit-scrollbar-thumb { background: #1a3a1a; }
 
-/* Console scrollbar styling */
-#console::-webkit-scrollbar {
-    width: 6px;
-}
-
-#console::-webkit-scrollbar-track {
-    background: #0a0a0a;
-}
-
-#console::-webkit-scrollbar-thumb {
-    background: #1a3a1a;
-    border-radius: 3px;
-}
-
-#console::-webkit-scrollbar-thumb:hover {
-    background: #2a5a2a;
-}
-
-/* --- Blinking Cursor --- */
 .cursor {
     display: inline-block;
     width: 8px;
@@ -441,13 +253,8 @@ button:disabled::before {
     vertical-align: text-bottom;
     margin-left: 2px;
 }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* --- Animated Loading Bar --- */
 .progress-bar-container {
     width: 100%;
     height: 3px;
@@ -456,107 +263,37 @@ button:disabled::before {
     border-radius: 2px;
     overflow: hidden;
 }
+.progress-bar-fill { height: 100%; width: 0%; background: #00ff41; }
 
-.progress-bar-fill {
-    height: 100%;
-    width: 0%;
-    background: #00ff41;
-    border-radius: 2px;
-    transition: width 0.3s;
-}
-
-/* --- Responsive --- */
 @media (max-width: 768px) {
-    .main-layout {
-        flex-direction: column;
-        align-items: center;
-    }
-    .media-box {
-        width: 50%;
-        margin-bottom: 15px;
-    }
-    #console {
-        width: 100%;
-    }
-    h1 {
-        font-size: 16px;
-        letter-spacing: 3px;
-    }
-    .ascii-banner {
-        font-size: 7px;
-    }
-    .btn-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    .status-dashboard {
-        gap: 8px;
-    }
-    .status-item {
-        font-size: 9px;
-        padding: 4px 10px;
-    }
+    .main-layout { flex-direction: column; align-items: center; }
+    .media-box { width: 50%; margin-bottom: 15px; }
+    #console { width: 100%; }
+    h1 { font-size: 16px; letter-spacing: 3px; }
+    .ascii-banner { font-size: 7px; }
+    .btn-container { flex-direction: column; }
+    .status-dashboard { gap: 8px; }
+    .status-item { font-size: 9px; padding: 4px 10px; }
 }
 
-/* --- Terminal-style selection --- */
-::selection {
-    background: rgba(0, 255, 65, 0.3);
-    color: #00ff41;
-}
+::selection { background: #1a2a1a; color: #00ff41; }
 
-::-moz-selection {
-    background: rgba(0, 255, 65, 0.3);
-    color: #00ff41;
-}
+.log-info { color: #00ff41; }
+.log-warn { color: #ffb000; }
+.log-error { color: #ff0033; }
+.log-success { color: #00ff41; }
+.log-debug { color: #556b55; }
+.log-system { color: #00d4ff; }
 
-/* --- Log level colors (for script) --- */
-.log-info {
-    color: #00ff41;
-}
-.log-warn {
-    color: #ffb000;
-    text-shadow: 0 0 4px rgba(255, 176, 0, 0.3);
-}
-.log-error {
-    color: #ff0033;
-    text-shadow: 0 0 6px rgba(255, 0, 51, 0.4);
-}
-.log-success {
-    color: #00ff41;
-    text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
-}
-.log-debug {
-    color: #556b55;
-}
-.log-system {
-    color: #00d4ff;
-    text-shadow: 0 0 4px rgba(0, 212, 255, 0.3);
-}
-
-/* --- Footer --- */
 .site-footer {
     margin-top: 30px;
     padding: 15px 10px;
     border-top: 1px solid #1a3a1a;
     color: #556b55;
-    font-family: 'Courier New', monospace;
     font-size: 11px;
     letter-spacing: 1px;
     text-align: center;
-    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
-
-.footer-info {
-    margin: 5px 0;
-}
-
-.footer-label {
-    color: #00ff41;
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
-    margin-right: 8px;
-}
-
-.footer-value {
-    color: #00d4ff;
-    text-shadow: 0 0 6px rgba(0, 212, 255, 0.3);
-}
+.footer-info { margin: 5px 0; }
+.footer-label { color: #00ff41; margin-right: 8px; }
+.footer-value { color: #00d4ff; }
