@@ -173,34 +173,43 @@
             var src = (bug === "lapse" ? "chain_lapse.js" : "chain_poops.js");
             out(">>> src: " + src);
             setState("Memuat " + src + " ...", "warn");
-            var moduleSupported = (function () {
-                try {
-                    return "noModule" in HTMLScriptElement.prototype;
-                } catch (e) { return false; }
-            })();
-            out(">>> module support: " + (moduleSupported ? "ya" : "TIDAK"));
-            if (moduleSupported) {
-                try {
-                    var s = document.createElement("script");
-                    s.type = "module";
-                    s.src = src + "?v=4";
-                    s.onload = function () {
-                        chainLoaded = true;
-                        cancelWatchdog();
-                        out(">>> modul dimuat");
-                    };
-                    s.onerror = function (e) {
-                        out("[error] module.onerror, fallback ke plain");
-                        loadChainPlain(src);
-                    };
-                    document.body.appendChild(s);
-                } catch (e) {
-                    out("[error] inject module: " + e.message + ", fallback");
-                    loadChainPlain(src);
+            var plainLoaded = false;
+            var moduleTried = false;
+            var moduleScriptEl = null;
+            function tryPlain() {
+                if (plainLoaded) return;
+                if (moduleTried) out(">>> module load gagal/timeout, fallback ke plain");
+                else out(">>> langsung pakai plain loader (PS4 safe)");
+                if (moduleScriptEl && moduleScriptEl.parentNode) {
+                    try { moduleScriptEl.parentNode.removeChild(moduleScriptEl); }
+                    catch (e) {}
                 }
-            } else {
+                plainLoaded = true;
                 loadChainPlain(src);
             }
+            try {
+                moduleScriptEl = document.createElement("script");
+                moduleScriptEl.type = "module";
+                moduleScriptEl.src = src + "?v=4";
+                moduleScriptEl.onload = function () {
+                    chainLoaded = true;
+                    cancelWatchdog();
+                    out(">>> modul dimuat");
+                };
+                moduleScriptEl.onerror = function (e) {
+                    moduleTried = true;
+                    out("[error] module.onerror, fallback ke plain");
+                    tryPlain();
+                };
+                document.body.appendChild(moduleScriptEl);
+            } catch (e) {
+                moduleTried = true;
+                out("[error] inject module: " + e.message);
+                tryPlain();
+            }
+            setTimeout(function () {
+                if (!chainLoaded) tryPlain();
+            }, 1500);
             setTimeout(function () {
                 if (!chainLoaded) {
                     out("[warn] belum konfirmasi-loaded setelah 3s; watchdog 12s jalan");
@@ -229,9 +238,19 @@
 
 function fetchText(url) {
             var sep = url.indexOf("?") >= 0 ? "&" : "?";
-            return fetch(url + sep + "v=4", { cache: "no-store" }).then(function (r) {
-                if (!r.ok) throw new Error("HTTP " + r.status);
-                return r.text();
+            return new Promise(function (resolve, reject) {
+                try {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", url + sep + "v=4", true);
+                    xhr.timeout = 10000;
+                    xhr.onload = function () {
+                        if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.responseText);
+                        else reject(new Error("HTTP " + xhr.status));
+                    };
+                    xhr.onerror = function () { reject(new Error("network error")); };
+                    xhr.ontimeout = function () { reject(new Error("timeout")); };
+                    xhr.send();
+                } catch (e) { reject(e); }
             });
         }
 
