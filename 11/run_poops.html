@@ -44,19 +44,34 @@
   </footer>
 </main>
 <script>
-window.addEventListener("error", function (e) {
+(function(){
     try {
         var s = document.getElementById("state");
-        if (s) { s.className = "bad"; s.textContent = "Kesalahan: " + (e && e.message ? e.message : "tidak diketahui"); }
-    } catch (_) {}
-}, false);
-window.addEventListener("unhandledrejection", function (e) {
-    try {
-        var s = document.getElementById("state");
-        if (s) { s.className = "bad"; s.textContent = "Gagal memuat modul"; }
-    } catch (_) {}
-}, false);
+        if (s) { s.className = "warn"; s.textContent = "Memuat..."; }
+    } catch(e) {}
+    var t = setTimeout(function(){
+        try {
+            var s = document.getElementById("state");
+            var o = document.getElementById("out");
+            if (s && s.textContent === "Memuat...") {
+                s.className = "bad";
+                s.textContent = "Rantai tidak berjalan. Coba muat ulang halaman.";
+            }
+            if (o && !o.textContent) {
+                o.textContent = "[tidak ada output dari chain]";
+            }
+        } catch(e) {}
+    }, 8000);
+    window.addEventListener("error", function(){
+        clearTimeout(t);
+        try {
+            var s = document.getElementById("state");
+            if (s) { s.className = "bad"; s.textContent = "Kesalahan saat memuat chain"; }
+        } catch(e) {}
+    }, false);
+})();
 </script>
-<script type="module">import "./chain_poops.js";</script>
+<script type="module" src="chain_poops.js?v=3"></script>
+<noscript><div style="color:#ff897d;padding:8px;">Aktifkan JavaScript untuk menjalankan exploit.</div></noscript>
 </body>
 </html>
