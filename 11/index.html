@@ -173,37 +173,116 @@
             var src = (bug === "lapse" ? "chain_lapse.js" : "chain_poops.js");
             out(">>> src: " + src);
             setState("Memuat " + src + " ...", "warn");
-            try {
-                var s = document.createElement("script");
-                s.type = "module";
-                s.src = src + "?v=4";
-                s.onload = function () {
-                    chainLoaded = true;
-                    cancelWatchdog();
-                    out(">>> modul dimuat");
-                };
-                s.onerror = function (e) {
-                    setState("Gagal memuat " + src, "bad");
-                    out("[error] script.onerror: " + (e && e.message ? e.message : e));
-                };
-                document.body.appendChild(s);
-            } catch (e) {
-                out("[error] inject: " + (e && e.message ? e.message : e));
-                setState("Gagal memulai chain", "bad");
-                import("./" + src).then(function () {
-                    chainLoaded = true;
-                    cancelWatchdog();
-                    out(">>> modul dimuat (via import)");
-                }).catch(function (e2) {
-                    setState("Gagal memuat " + src, "bad");
-                    out("[error] import: " + (e2 && e2.message ? e2.message : e2));
-                });
+            var moduleSupported = (function () {
+                try {
+                    return "noModule" in HTMLScriptElement.prototype;
+                } catch (e) { return false; }
+            })();
+            out(">>> module support: " + (moduleSupported ? "ya" : "TIDAK"));
+            if (moduleSupported) {
+                try {
+                    var s = document.createElement("script");
+                    s.type = "module";
+                    s.src = src + "?v=4";
+                    s.onload = function () {
+                        chainLoaded = true;
+                        cancelWatchdog();
+                        out(">>> modul dimuat");
+                    };
+                    s.onerror = function (e) {
+                        out("[error] module.onerror, fallback ke plain");
+                        loadChainPlain(src);
+                    };
+                    document.body.appendChild(s);
+                } catch (e) {
+                    out("[error] inject module: " + e.message + ", fallback");
+                    loadChainPlain(src);
+                }
+            } else {
+                loadChainPlain(src);
             }
             setTimeout(function () {
                 if (!chainLoaded) {
-                    out("[warn] modul belum konfirmasi-loaded setelah 3 detik; watchdog 12s tetap berjalan");
+                    out("[warn] belum konfirmasi-loaded setelah 3s; watchdog 12s jalan");
                 }
             }, 3000);
+        }
+
+        function stripModule(code) {
+            code = code.replace(/^\s*import\s+[\s\S]*?from\s*["'][^"']+["']\s*;?\s*$/gm, "");
+            code = code.replace(/^\s*import\s*\(["'][^"']+["']\)\s*;?\s*$/gm, "");
+            code = code.replace(/^\s*export\s+default\s+/gm, "");
+            code = code.replace(/^\s*export\s+(const|let|var|function|class|async\s+function)\s+/gm, "$1 ");
+            code = code.replace(/^\s*export\s*\{[\s\S]*?\}\s*;?\s*$/gm, "");
+            code = code.replace(/^\s*export\s*\*\s*from\s*["'][^"']+["']\s*;?\s*$/gm, "");
+            return code;
+        }
+
+        function attachExports(code, names) {
+            var tail = "\n;(function(){ try {";
+            for (var i = 0; i < names.length; i++) {
+                tail += "if (typeof " + names[i] + " !== 'undefined') window." + names[i] + " = " + names[i] + ";";
+            }
+            tail += "} catch (e) {} })();\n";
+            return code + tail;
+        }
+
+function fetchText(url) {
+            var sep = url.indexOf("?") >= 0 ? "&" : "?";
+            return fetch(url + sep + "v=4", { cache: "no-store" }).then(function (r) {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.text();
+            });
+        }
+
+        function loadChainPlain(src) {
+            out(">>> plain loader: fetch dependencies + chain");
+            var deps;
+            if (bug === "poops") {
+                deps = [
+                    { url: "int64.js", attach: ["int64"] },
+                    { url: "core.js?v=10", attach: ["establishPrimitive", "currentCarrier", "releaseFakeCell", "fakeCellReleased", "carrierHeaderCopy", "carrierHomeVector", "profile", "aimCarrier", "restoreCarrier", "plausibleAddress", "plausibleCell"] },
+                    { url: "ps4_offsets.js", attach: ["REQUIRED_KEYS", "OPTIONAL_KEYS", "PS4", "offsetsFor"] },
+                    { url: "mem.js", attach: ["pairStatus", "promoteToRealPair", "installWindowP", "read1", "read2", "read4", "read8", "write1", "write2", "write4", "write8", "leakval", "readInto", "toI64", "addrNumber"] }
+                ];
+            } else {
+                deps = [
+                    { url: "int64.js", attach: ["int64"] },
+                    { url: "core.js", attach: ["establishPrimitive", "currentCarrier", "releaseFakeCell", "fakeCellReleased", "carrierHeaderCopy", "carrierHomeVector", "profile", "aimCarrier", "restoreCarrier", "plausibleAddress", "plausibleCell"] },
+                    { url: "ps4_offsets.js", attach: ["REQUIRED_KEYS", "OPTIONAL_KEYS", "PS4", "offsetsFor"] },
+                    { url: "mem.js", attach: ["pairStatus", "promoteToRealPair", "installWindowP", "read1", "read2", "read4", "read8", "write1", "write2", "write4", "write8", "leakval", "readInto", "toI64", "addrNumber"] }
+                ];
+            }
+            var p = Promise.resolve();
+            deps.forEach(function (d) {
+                p = p.then(function () {
+                    return fetchText(d.url).then(function (code) {
+                        code = stripModule(code);
+                        code = attachExports(code, d.attach);
+                        out(">>> eval " + d.url);
+                        try { (0, eval)(code); }
+                        catch (e) { out("[error] eval " + d.url + ": " + e.message); throw e; }
+                    });
+                });
+            });
+            p.then(function () {
+                return fetchText(src).then(function (code) {
+                    out(">>> eval " + src);
+                    code = stripModule(code);
+                    var chainParams = bug === "poops"
+                        ? "establishPrimitive, installWindowP, pairStatus, int64, offsetsFor"
+                        : "establishPrimitive, installWindowP, int64, offsetsFor";
+                    var chainArgs = bug === "poops"
+                        ? "window.establishPrimitive, window.installWindowP, window.pairStatus, window.int64, window.offsetsFor"
+                        : "window.establishPrimitive, window.installWindowP, window.int64, window.offsetsFor";
+                    var wrapped = "(function(" + chainParams + "){\n" + code + "\n}).call(window, " + chainArgs + ");";
+                    try { (0, eval)(wrapped); chainLoaded = true; cancelWatchdog(); out(">>> chain dimuat (plain)"); }
+                    catch (e) { out("[error] chain eval: " + e.message); setState("Gagal menjalankan chain", "bad"); }
+                });
+            }).catch(function (e) {
+                out("[fatal] " + e.message);
+                setState("Gagal memuat chain", "bad");
+            });
         }
 
         function waitForTap(msg, action) {
