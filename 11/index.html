@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id" manifest="cache-ps4-modern.appcache">
 <head>
-    <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b0c">
@@ -20,7 +20,7 @@
   .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
   .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
   .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
-  #wrap { width:100%; max-width:760px; margin:auto; padding:32px; background:#0b1b1a; border:1px solid rgba(91,255,177,.32); }
+  #wrap { width:100%; max-width:980px; margin:22px auto 0; padding:24px; background:#0b1b1a; border:1px solid rgba(91,255,177,.32); display:flex; flex-direction:column; min-height:0; flex:1; }
   .eyebrow { margin-bottom:11px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
   .eyebrow:before { content:"// "; color:#9effc9; }
   #state { margin:0 0 16px; color:#effff7; font-size:29px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
@@ -29,6 +29,8 @@
   #cache { min-height:20px; margin-top:16px; padding-top:15px; border-top:1px solid rgba(120,223,176,.14); color:#7d9b90; font:12px monospace; }
   #cache:before { content:"STATUS  "; color:#3fe69a; letter-spacing:.08em; }
   #cache.cacheok { color:#8df2b7; }
+  #out { flex:1; min-height:240px; max-height:60vh; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:#010a08; color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; word-break:break-word; }
+  #out:empty:after { content:"Menyiapkan log eksekusi…"; color:#618276; }
   .change-choice { display:inline-block; margin-top:16px; padding:7px 10px; border:1px solid rgba(59,239,152,.42); color:#8df2b7; font:11px monospace; letter-spacing:.06em; text-decoration:none; }
   .change-choice:focus { border-color:#8df2b7; color:#effff7; outline:none; }
   .ok { color:#8df2b7 !important; } .bad { color:#ff897d !important; } .warn { color:#ffd572 !important; }
@@ -47,6 +49,7 @@
     <div id="state">Mendeteksi firmware...</div>
     <div id="det"></div>
     <div id="cache"></div>
+    <pre id="out" aria-live="polite"></pre>
     <a class="change-choice" href="../index.html?change=1">GANTI PILIHAN FIRMWARE</a>
   </section>
     <footer class="footer site-footer">
@@ -64,7 +67,8 @@
         var stateEl = document.getElementById("state");
         var detEl = document.getElementById("det");
         var cacheEl = document.getElementById("cache");
-        if (!stateEl || !detEl || !cacheEl) return;
+        var outEl = document.getElementById("out");
+        if (!stateEl || !detEl || !cacheEl || !outEl) return;
 
         function setState(t, c) { try { stateEl.textContent = t; stateEl.className = c || ""; } catch (e) {} }
         function setCache(t, ok) { try { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; } catch (e) {} }
@@ -76,6 +80,13 @@
                 detEl.appendChild(document.createTextNode(" · Metode: "));
                 var b2 = document.createElement("b"); b2.textContent = bug; detEl.appendChild(b2);
                 detEl.appendChild(document.createTextNode(" · " + why));
+            } catch (e) {}
+        }
+        function out(t) {
+            try {
+                if (outEl.textContent) outEl.textContent += "\n" + t;
+                else outEl.textContent = t;
+                outEl.scrollTop = outEl.scrollHeight;
             } catch (e) {}
         }
 
@@ -113,24 +124,63 @@
 
         if (!bug) { setState("Firmware tidak kompatibel", "bad"); return; }
 
-        var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html") + location.search;
-        var startQueued = false;
-        var goTimer = 0;
-        function cancelGo() { if (goTimer) { try { clearTimeout(goTimer); } catch (e) {} goTimer = 0; } }
+        var chainLoaded = false;
+        var watchdog = 0;
+        function cancelWatchdog() { if (watchdog) { try { clearTimeout(watchdog); } catch (e) {} watchdog = 0; } }
+        function armWatchdog() {
+            cancelWatchdog();
+            try {
+                watchdog = window.setTimeout(function () {
+                    if (!chainLoaded) {
+                        setState("Rantai tidak berjalan. Coba muat ulang halaman.", "bad");
+                        if (!outEl.textContent) out("[tidak ada output dari chain]");
+                    }
+                }, 12000);
+            } catch (e) {}
+        }
+        armWatchdog();
+
+        try {
+            window.addEventListener("error", function () {
+                setState("Kesalahan saat memuat chain", "bad");
+            }, false);
+        } catch (e) {}
+
+        var goStarted = false;
         function go() {
-            if (startQueued) return;
-            startQueued = true;
-            cancelGo();
+            if (goStarted) return;
+            goStarted = true;
+            cancelWatchdog();
             try { acCleanup(); } catch (e) {}
             try { setCache("Cache siap — memulai chain secara otomatis", true); } catch (e) {}
             try { setState("Memuat rangkaian " + bug + "...", "warn"); } catch (e) {}
-            try { location.replace(target); } catch (e) {}
+            try { out(">>> memilih chain: " + bug); } catch (e) {}
+            loadChain();
+        }
+
+        function loadChain() {
+            var src = (bug === "lapse" ? "chain_lapse.js?v=4" : "chain_poops.js?v=4");
+            try {
+                setState("Memuat " + src + " ...", "warn");
+                import("./" + src).then(function () {
+                    chainLoaded = true;
+                    cancelWatchdog();
+                }).catch(function (e) {
+                    setState("Gagal memuat " + src, "bad");
+                    out("[error] " + (e && e.message ? e.message : e));
+                });
+            } catch (e) {
+                setState("Gagal memulai chain", "bad");
+                out("[error] " + (e && e.message ? e.message : e));
+            }
         }
 
         function waitForTap(msg, action) {
             try { setState(msg + " — memulai otomatis", "warn"); } catch (e) {}
-            cancelGo();
-            try { goTimer = window.setTimeout(action, 600); } catch (e) {}
+            cancelWatchdog();
+            try {
+                setTimeout(action, 600);
+            } catch (e) {}
         }
 
         var ac = null;
@@ -157,12 +207,6 @@
         }
         on(window, "pagehide", acCleanup);
         on(window, "unload", acCleanup);
-
-        try {
-            window.addEventListener("error", function (e) {
-                try { setState("Kesalahan halaman", "bad"); } catch (_) {}
-            }, false);
-        } catch (e) {}
 
         if (!ac || !document.documentElement.hasAttribute("manifest")) {
             setState("Aplikasi tidak mendukung cache otomatis", "bad");
