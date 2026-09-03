@@ -6,6 +6,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b0c">
 <title>B41M | Host Exploit PS4</title>
+<link rel="modulepreload" href="core.js?v=10">
+<link rel="modulepreload" href="int64.js">
+<link rel="modulepreload" href="ps4_offsets.js">
+<link rel="modulepreload" href="rpc_worker.js">
+<link rel="modulepreload" href="mem.js">
 <style>
   * { box-sizing:border-box; }
   html, body { min-height:100%; margin:0; }
@@ -194,6 +199,11 @@
                     out("[error] import: " + (e2 && e2.message ? e2.message : e2));
                 });
             }
+            setTimeout(function () {
+                if (!chainLoaded) {
+                    out("[warn] modul belum konfirmasi-loaded setelah 3 detik; watchdog 12s tetap berjalan");
+                }
+            }, 3000);
         }
 
         function waitForTap(msg, action) {
