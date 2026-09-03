@@ -121,8 +121,9 @@
             }
         } catch (e) {}
         setDet(key || "tidak dapat dideteksi", bug || "sistem tidak kompatibel", why);
+        out(">>> deteksi: fw=" + (key || "?") + " bug=" + (bug || "?") + " why=" + why);
 
-        if (!bug) { setState("Firmware tidak kompatibel", "bad"); return; }
+        if (!bug) { setState("Firmware tidak kompatibel", "bad"); out("[stop] firmware tidak kompatibel"); return; }
 
         var chainLoaded = false;
         var watchdog = 0;
@@ -141,8 +142,13 @@
         armWatchdog();
 
         try {
-            window.addEventListener("error", function () {
-                setState("Kesalahan saat memuat chain", "bad");
+            window.addEventListener("error", function (e) {
+                try { setState("Kesalahan saat memuat chain", "bad"); } catch (_) {}
+                try { out("[error] " + (e && e.message ? e.message : "unknown")); } catch (_) {}
+            }, false);
+            window.addEventListener("unhandledrejection", function (e) {
+                try { setState("Promise rejection", "bad"); } catch (_) {}
+                try { out("[rejection] " + (e && e.reason ? (e.reason.message || e.reason) : "unknown")); } catch (_) {}
             }, false);
         } catch (e) {}
 
@@ -159,19 +165,34 @@
         }
 
         function loadChain() {
-            var src = (bug === "lapse" ? "chain_lapse.js?v=4" : "chain_poops.js?v=4");
+            var src = (bug === "lapse" ? "chain_lapse.js" : "chain_poops.js");
+            out(">>> src: " + src);
+            setState("Memuat " + src + " ...", "warn");
             try {
-                setState("Memuat " + src + " ...", "warn");
+                var s = document.createElement("script");
+                s.type = "module";
+                s.src = src + "?v=4";
+                s.onload = function () {
+                    chainLoaded = true;
+                    cancelWatchdog();
+                    out(">>> modul dimuat");
+                };
+                s.onerror = function (e) {
+                    setState("Gagal memuat " + src, "bad");
+                    out("[error] script.onerror: " + (e && e.message ? e.message : e));
+                };
+                document.body.appendChild(s);
+            } catch (e) {
+                out("[error] inject: " + (e && e.message ? e.message : e));
+                setState("Gagal memulai chain", "bad");
                 import("./" + src).then(function () {
                     chainLoaded = true;
                     cancelWatchdog();
-                }).catch(function (e) {
+                    out(">>> modul dimuat (via import)");
+                }).catch(function (e2) {
                     setState("Gagal memuat " + src, "bad");
-                    out("[error] " + (e && e.message ? e.message : e));
+                    out("[error] import: " + (e2 && e2.message ? e2.message : e2));
                 });
-            } catch (e) {
-                setState("Gagal memulai chain", "bad");
-                out("[error] " + (e && e.message ? e.message : e));
             }
         }
 
