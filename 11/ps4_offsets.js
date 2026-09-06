@@ -15,7 +15,7 @@ export const REQUIRED_KEYS = [
 export const OPTIONAL_KEYS = [
     "k_stubs", "wk___imp_pthread_create", "k_pthread_create",
     // Overrides the patch-blob name, which otherwise derives from the firmware
-    // key ("13.00" -> patches/1300.bin). Needed when two firmwares share one
+    // key ("13.00 - 13.04" -> patches/1300.bin). Needed when two firmwares share one
     // kernel and therefore one blob.
     "kpatch",
     // Names the firmware this block was copied from. Purely declarative -- no
