@@ -8,39 +8,29 @@
 <style>
   * { box-sizing:border-box; }
   html, body { min-height:100%; margin:0; }
-  body { overflow:hidden; background:
-         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
-         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
-         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
-         #050b0c; color:#d7ebe5;
+    body { overflow:hidden; background:#050b0c; color:#d7ebe5;
          font:15px/1.5 "Segoe UI", Arial, sans-serif; }
-  #shell { position:relative; z-index:1; min-height:100vh; padding:28px; display:flex; flex-direction:column; }
-  #brand { display:flex; align-items:center; padding:0 0 22px; border-bottom:1px solid rgba(96,255,184,.24); }
-    #brand img { width:42px; height:42px; margin-right:13px; border-radius:50%; border:1px solid #42e99c; }
+    #shell { min-height:100vh; padding:16px; display:flex; flex-direction:column; }
+    #brand { display:flex; align-items:center; padding-bottom:16px; }
+        #brand img { width:42px; height:42px; margin-right:12px; }
   .brand-copy { position:relative; line-height:1.05; }
-  .brand-name { position:relative; display:block; color:#e8fff4; font:800 25px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; text-shadow:2px 0 #0b6d46, -1px 0 rgba(115,255,190,.8), 0 0 16px rgba(55,255,156,.7); }
-  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
-  .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
-  .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
-    #wrap { width:100%; max-width:760px; margin:auto; padding:32px; background:#0b1c16; border:1px solid rgba(91,255,177,.32); }
-  .eyebrow { margin-bottom:11px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
-  .eyebrow:before { content:"// "; color:#9effc9; }
-  #state { margin:0 0 16px; color:#effff7; font-size:29px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
-  #det { padding:13px 15px; border-left:3px solid #27d889; background:rgba(37,129,87,.1); color:#92b7a9; font-size:13px; }
+        .brand-name { display:block; color:#e8fff4; font:800 25px/1 Consolas, "Courier New", monospace; }
+    .brand-sub { display:block; margin-top:4px; color:#70a996; font:10px monospace; }
+    .session { display:none; }
+        #wrap { width:100%; max-width:760px; margin:auto; }
+    .eyebrow { margin-bottom:8px; color:#46ec9b; font:11px monospace; }
+    #state { margin:0 0 12px; color:#effff7; font-size:29px; font-weight:700; }
+    #det { color:#92b7a9; font-size:13px; }
   #det b { color:#e0fff0; font-weight:600; }
-  #cache { min-height:20px; margin-top:16px; padding-top:15px; border-top:1px solid rgba(120,223,176,.14); color:#7d9b90; font:12px monospace; }
-  #cache:before { content:"STATUS  "; color:#3fe69a; letter-spacing:.08em; }
+    #cache { min-height:20px; margin-top:12px; color:#7d9b90; font:12px monospace; }
   #cache.cacheok { color:#8df2b7; }
-  .change-choice { display:inline-block; margin-top:16px; padding:7px 10px; border:1px solid rgba(59,239,152,.42); color:#8df2b7; font:11px monospace; letter-spacing:.06em; text-decoration:none; }
-  .change-choice:hover, .change-choice:focus { border-color:#8df2b7; color:#effff7; outline:none; }
+    .change-choice { color:#8df2b7; font:11px monospace; }
   .ok { color:#8df2b7 !important; } .bad { color:#ff897d !important; } .warn { color:#ffd572 !important; }
-  .footer { padding-top:18px; color:#527366; font:10px/1.7 monospace; letter-spacing:.07em; text-align:center; }
+    .footer { padding-top:16px; color:#527366; font:10px/1.7 monospace; text-align:center; }
   .footer div { display:inline; }
   .footer div + div:before { content:"  ·  "; color:#2f8660; }
   .footer b { color:#39dd91; font-weight:400; }
-    @media (max-width:560px) { #shell { padding:18px; } #wrap { padding:24px 20px; } #state { font-size:22px; } .session { display:none; } }
+    @media (max-width:560px) { #state { font-size:22px; } }
 </style>
 </head>
 <body>

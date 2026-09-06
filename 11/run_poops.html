@@ -8,31 +8,23 @@
 <style>
   * { box-sizing:border-box; }
   html, body { height:100%; margin:0; }
-  body { overflow:hidden; background:
-         linear-gradient(rgba(5,11,12,.78), rgba(5,11,12,.82)),
-         linear-gradient(180deg, rgba(206,17,38,.22) 0 50%, rgba(255,255,255,.18) 50% 100%),
-         linear-gradient(90deg, rgba(0,0,0,.10), rgba(0,0,0,0)),
-         #050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
-  #shell { position:relative; z-index:1; display:flex; flex-direction:column; height:100%; padding:24px 28px 20px; }
-  #brand { display:flex; align-items:center; padding:0 0 18px; border-bottom:1px solid rgba(96,255,184,.24); }
-  #brand img { width:40px; height:40px; margin-right:12px; border:1px solid #42e99c; border-radius:50%; }
+    body { overflow:hidden; background:#050b0c; color:#d7ebe5; font:15px/1.5 "Segoe UI", Arial, sans-serif; }
+    #shell { display:flex; flex-direction:column; height:100%; padding:16px; }
+    #brand { display:flex; align-items:center; padding-bottom:16px; }
+    #brand img { width:40px; height:40px; margin-right:12px; }
   .brand-copy { line-height:1.05; }
-  .brand-name { display:block; color:#e8fff4; font:800 23px/1 Consolas, "Courier New", monospace; letter-spacing:.18em; text-shadow:2px 0 #0b6d46, -1px 0 rgba(115,255,190,.8), 0 0 16px rgba(55,255,156,.7); }
-  .brand-name:before { content:"["; margin-right:4px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-name:after { content:"]"; margin-left:-1px; color:#4bffac; font-weight:400; text-shadow:none; }
-  .brand-sub { display:block; margin-top:6px; color:#70a996; font:10px monospace; letter-spacing:.1em; }
-  .brand-sub:before { content:"NODE_041 // "; color:#3df096; }
-  .session { margin-left:auto; padding:6px 10px; border:1px solid rgba(59,239,152,.35); color:#6dca9d; font:10px monospace; letter-spacing:.08em; }
-  #wrap { display:flex; flex:1; flex-direction:column; min-height:0; width:100%; max-width:980px; margin:22px auto 0; padding:24px; background:#0b1c16; border:1px solid rgba(91,255,177,.32); }
-  .eyebrow { margin-bottom:9px; color:#46ec9b; font:11px monospace; letter-spacing:.16em; }
-  .eyebrow:before { content:"// "; color:#9effc9; }
-  #state { margin:0 0 15px; color:#effff7; font-size:23px; font-weight:700; letter-spacing:.015em; text-transform:uppercase; }
-  #out { flex:1; min-height:0; overflow-y:auto; padding:15px; border:1px solid rgba(87,224,163,.22); border-left:3px solid #27d889; background:rgba(1,10,8,.68); color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; }
+  .brand-name { display:block; color:#e8fff4; font:800 23px/1 Consolas, "Courier New", monospace; }
+  .brand-sub { display:block; margin-top:4px; color:#70a996; font:10px monospace; }
+  .session { display:none; }
+  #wrap { display:flex; flex:1; flex-direction:column; min-height:0; width:100%; max-width:980px; margin:16px auto 0; }
+  .eyebrow { margin-bottom:8px; color:#46ec9b; font:11px monospace; }
+  #state { margin:0 0 12px; color:#effff7; font-size:23px; font-weight:700; }
+  #out { flex:1; min-height:0; overflow-y:auto; color:#a9c9bc; white-space:pre-wrap; font:12px/1.55 Consolas, "Courier New", monospace; }
   #out:empty:after { content:"Menyiapkan log eksekusi…"; color:#618276; }
   .ok { color:#8df2b7; } .bad { color:#ff897d; } .warn { color:#ffd572; }
-  .footer { padding-top:13px; color:#527366; font:10px monospace; letter-spacing:.1em; text-align:center; }
+  .footer { padding-top:12px; color:#527366; font:10px monospace; text-align:center; }
   .footer span { color:#39dd91; }
-  @media (max-width:560px) { #shell { padding:18px; } #wrap { margin-top:16px; padding:18px; } #state { font-size:18px; } .session { display:none; } }
+  @media (max-width:560px) { #state { font-size:18px; } }
 </style>
 </head>
 <body>
