@@ -75,12 +75,12 @@
       var changeButton = document.getElementById("change-choice");
       var savedChoice, detectedFirmware;
       var supportedFirmware = {
-        "11.00": "11/index.html", "11.50": "11/index.html", "11.52": "11/index.html",
+        "11.00": "6/index.html", "11.50": "11/index.html", "11.52": "11/index.html",
         "12.00": "11/index.html", "12.02": "11/index.html",
         "12.50": "11/index.html", "12.52": "11/index.html",
         "13.00": "11/index.html", "13.02": "11/index.html"
       };
-      var legacyFirmware = /^(6|7|8|9|10)\./;
+      var legacyFirmware = /^(6|7|8|9|10|11)\./;
 
       function detectFirmware() {
         var match = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
@@ -109,8 +109,8 @@
 
       try { if (!detectedFirmware && !savedChoice) savedChoice = localStorage.getItem(choiceKey); } catch (e) {}
       var renamedHosts = {
-        "Webkit6-10.50/index.html": "6/index.html",
-        "Webkit11-13/index.html": "11/index.html"
+        "Webkit6-11.02/index.html": "6/index.html",
+        "Webkit11.50-13.04/index.html": "11/index.html"
       };
       if (renamedHosts[savedChoice]) {
         savedChoice = renamedHosts[savedChoice];
