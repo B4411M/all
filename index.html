@@ -50,7 +50,7 @@
         <span class="open">HOST TERSEDIA</span>
       </a>
 
-      <a href="11/index.html">
+      <a href="1113/index.html">
         <div class="range">11.50 – 13.04</div>
         <h2>WebKit Modern</h2>
         <p class="desc">Host untuk firmware 11.50 sampai 13.04 (11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00, 13.02, 13.04). Metode dipilih otomatis berdasarkan firmware yang terdeteksi.</p>
@@ -75,10 +75,10 @@
       var changeButton = document.getElementById("change-choice");
       var savedChoice, detectedFirmware;
       var supportedFirmware = {
-        "11.00": "6/index.html", "11.50": "11/index.html", "11.52": "11/index.html",
-        "12.00": "11/index.html", "12.02": "11/index.html",
-        "12.50": "11/index.html", "12.52": "11/index.html",
-        "13.00": "11/index.html", "13.02": "11/index.html"
+        "11.00": "6/index.html", "11.50": "1113/index.html", "11.52": "1113/index.html",
+        "12.00": "1113/index.html", "12.02": "1113/index.html",
+        "12.50": "1113/index.html", "12.52": "1113/index.html",
+        "13.00": "1113/index.html", "13.02": "1113/index.html"
       };
       var legacyFirmware = /^(6|7|8|9|10|11)\./;
 
@@ -110,7 +110,7 @@
       try { if (!detectedFirmware && !savedChoice) savedChoice = localStorage.getItem(choiceKey); } catch (e) {}
       var renamedHosts = {
         "Webkit6-11.02/index.html": "6/index.html",
-        "Webkit11.50-13.04/index.html": "11/index.html"
+        "Webkit11.50-13.04/index.html": "1113/index.html"
       };
       if (renamedHosts[savedChoice]) {
         savedChoice = renamedHosts[savedChoice];
