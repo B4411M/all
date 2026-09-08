@@ -5,21 +5,82 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>B41M</title>
 <style>
-  html, body { margin:0; padding:0; background:#020e2b; color:#c8ced8;
-               font:15px/1.45 "Segoe UI", system-ui, sans-serif; }
-  #wrap { padding:16px 18px; }
-  #state { font-size:22px; font-weight:700; margin:0 0 6px; }
-  #det { font-size:13px; color:#8b95a3; margin:0 0 4px; }
-  #det b { color:#c8ced8; font-weight:600; }
-  #cache { font-size:12px; color:#5c6672; margin:0 0 10px; min-height:14px; }
-  #cache.cacheok { color:#7fd0a0; }
-  .ok { color:#7fd0a0; } .bad { color:#20923a; } .warn { color:#59440b; }
-  #brand { text-align:center; padding:8px 10px; background:#0e1116;
-           border-bottom:1px solid #501919; }
-  #brand img { width:28px; height:28px; margin-right:8px; border-radius:50%;
-               vertical-align:middle; }
-  #brand b { font-size:15px; font-weight:700; letter-spacing:.14em;
-             color:#e6ebf2; vertical-align:middle; }
+html,body{
+  margin:0;
+  padding:0;
+  background:#000;
+  color:#00ff41;
+  font:14px/1.4 Arial,sans-serif;
+}
+
+#wrap{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:14px 18px;
+  box-sizing:border-box;
+}
+
+/* HEADER */
+#brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 0 10px;
+  border-bottom:1px solid #00ff41;
+}
+
+#brand img{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+}
+
+#brand b{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:2px;
+  color:#00ff41;
+  text-shadow:0 0 5px #00ff41;
+}
+
+/* STATUS UTAMA */
+#state{
+  margin:14px 0 7px;
+  font-size:21px;
+  line-height:1.2;
+  font-weight:700;
+  color:#00ff41;
+  text-shadow:0 0 6px #00ff41;
+}
+
+/* DETAIL */
+#det{
+  margin:0;
+  font-size:13px;
+  line-height:1.7;
+  color:#00ff41;
+}
+
+#det b{
+  color:#00ff41;
+  font-weight:600;
+}
+
+/* CACHE */
+#cache{
+  margin-top:4px;
+  min-height:16px;
+  font-size:12px;
+  color:#00ff41;
+}
+
+#cache.cacheok,
+.ok,
+.bad,
+.warn{
+  color:#00ff41;
+}
 </style>
 </head>
 <body>
