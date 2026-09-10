@@ -1,100 +1,94 @@
 <!DOCTYPE html>
-<html lang="en" manifest="cache.appcache">
+<html lang="id" manifest="cache-ps4-legacy.appcache">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>B41M</title>
-<style>
-html,body{
-  margin:0;
-  padding:0;
-  background:#000;
-  color:#00ff41;
-  font:14px/1.4 Arial,sans-serif;
-}
-
-#wrap{
-  width:100%;
-  max-width:520px;
-  margin:0 auto;
-  padding:14px 18px;
-  box-sizing:border-box;
-}
-
-/* HEADER */
-#brand{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:8px 0 10px;
-  border-bottom:1px solid #00ff41;
-}
-
-#brand img{
-  width:28px;
-  height:28px;
-  border-radius:50%;
-}
-
-#brand b{
-  font-size:15px;
-  font-weight:700;
-  letter-spacing:2px;
-  color:#00ff41;
-  text-shadow:0 0 5px #00ff41;
-}
-
-/* STATUS UTAMA */
-#state{
-  margin:14px 0 7px;
-  font-size:21px;
-  line-height:1.2;
-  font-weight:700;
-  color:#00ff41;
-  text-shadow:0 0 6px #00ff41;
-}
-
-/* DETAIL */
-#det{
-  margin:0;
-  font-size:13px;
-  line-height:1.7;
-  color:#00ff41;
-}
-
-#det b{
-  color:#00ff41;
-  font-weight:600;
-}
-
-/* CACHE */
-#cache{
-  margin-top:4px;
-  min-height:16px;
-  font-size:12px;
-  color:#00ff41;
-}
-
-#cache.cacheok,
-.ok,
-.bad,
-.warn{
-  color:#00ff41;
-}
-</style>
+  <link rel="icon" type="image/png" href="../11/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B41M Host Exploit PS4</title>
+  <link rel="stylesheet" href="includes/style.css">
 </head>
 <body>
-<div id="brand"><b>B41M</b></div>
-<div id="wrap">
-  <div id="state">определение прошивки...</div>
-  <div id="det"></div>
-  <div id="cache"></div>
-</div>
-    <footer class="footer site-footer">
-        <div class="footer-info"><span class="footer-label">[ALAMAT]</span> <span class="footer-value">Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</span></div>
-        <div class="footer-info"><span class="footer-label">[KONTAK]</span> <span class="footer-value">085555551497</span></div>
-        <div class="footer-info"><span class="footer-label">[COPYRIGHT]</span> <span class="footer-value">© 2026 B41M 17PlayBox</span></div>
-        <div class="footer-info"><span class="footer-label">[PEMILIK]</span> <span class="footer-value">Ibrahim Yusuf</span></div>
+
+<!-- ASCII Banner -->
+  <pre class="ascii-banner">
+██████╗ ██╗  ██╗ ██╗███╗   ███╗     ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗██████╗  ██████╗ ██╗  ██╗
+██╔══██╗██║  ██║███║████╗ ████║    ███║╚════██║██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔═══██╗╚██╗██╔╝
+██████╔╝███████║╚██║██╔████╔██║    ╚██║    ██╔╝██████╔╝██║     ███████║ ╚████╔╝ ██████╔╝██║   ██║ ╚███╔╝ 
+██╔══██╗╚════██║ ██║██║╚██╔╝██║     ██║   ██╔╝ ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██╔══██╗██║   ██║ ██╔██╗ 
+██████╔╝     ██║ ██║██║ ╚═╝ ██║     ██║   ██║  ██║     ███████╗██║  ██║   ██║   ██████╔╝╚██████╔╝██╔╝ ██╗
+╚═════╝      ╚═╝ ╚═╝╚═╝     ╚═╝     ╚═╝   ╚═╝  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝
+</pre>
+
+  <h1 data-text="B41M 17PlayBox Jailbreak">B41M 17PlayBox Jailbreak</h1>
+  <h3 id="UA">> Berjalan pada:</h3>
+
+  <div id="cache-status" class="cache-status" role="status">Menyiapkan cache offline...</div>
+
+  <!-- Status Dashboard -->
+  <div class="status-dashboard">
+    <div class="status-item">
+      <span class="label">[SYS]</span>
+      <span class="value" id="sys-status">MEMULAI</span>
+    </div>
+    <div class="status-item">
+      <span class="label">[EXPLOIT]</span>
+      <span class="value" id="exploit-status">SIAP</span>
+    </div>
+    <div class="status-item">
+      <span class="label">[UPTIME]</span>
+      <span class="value" id="uptime-display">00:00:00</span>
+    </div>
+    <div class="status-item">
+      <span class="label">[CONN]</span>
+      <span class="value" id="conn-status">AMAN</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="btn-container">
+    <form id="kernel-options">
+      <input type="radio" name="kernel" id="netctrl-exploit" value="netctrl">
+      <label for="netctrl-exploit">NetCtrl</label>
+      <input type="radio" name="kernel" id="lapse-exploit" value="lapse">
+      <label for="lapse-exploit">Lapse</label>
+    </form>
+    <button id="jeilbrek">> Jalankan Jailbreak</button>
+    <div class="autoJb">
+      <label for="autoJbInput" id="autoJbLabel">Jailbreak Otomatis</label>
+      <input id="autoJbInput" type="checkbox">
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <div class="media-box">
+      <img src="includes/ps.jpg" alt="PS4 Console">
+    </div>
+
+    <pre id="console"><div id="console-content"><span class="log-system">[SISTEM] Terminal siap. Menunggu eksekusi...</span><span class="cursor"></span></div>
+  </pre>
+
+  </div>
+
+  <p><a class="change-firmware" href="../index.html?change=1">[ GANTI PILIHAN FIRMWARE ]</a></p>
+
+  <footer class="site-footer">
+    <div class="footer-info">
+      <span class="footer-label">[ALAMAT]</span>
+      <span class="footer-value">Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia.</span>
+    </div>
+    <div class="footer-info">
+      <span class="footer-label">[KONTAK]</span>
+      <span class="footer-value">085555551497</span>
+    </div>
+    <div class="footer-info">
+      <span class="footer-label">[COPYRIGHT]</span>
+      <span class="footer-value">© <span id="footer-year"></span> B41M 17PlayBox</span>
+    </div>
+    <div class="footer-info">
+      <span class="footer-label">[PEMILIK]</span>
+      <span class="footer-value">Ibrahim Yusuf</span>
+    </div>
   </footer>
 <script>
 (function () {
