@@ -24,7 +24,7 @@ B41M 17PlayBox adalah host web untuk menjalankan workflow WebKit pada browser Pl
 | Host | Firmware | Keterangan |
 | --- | --- | --- |
 | `6/` | 6.00-11.02 | Host legacy dengan pilihan chain NetCtrl atau Lapse. |
-| `11/` | 11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00, 13.02 | Host modern dengan chain sesuai tabel offset. |
+| `11/` | 11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00, 13.02, 13.04, 13.50, 13.52 | Host modern dengan chain sesuai tabel offset. |
 
 Versi firmware harus cocok dengan offset yang tersedia. Jangan menganggap semua versi di antara angka pada tabel otomatis didukung.
 
@@ -44,7 +44,7 @@ Manifest yang digunakan proyek:
 | --- | --- |
 | Beranda utama | `cache.manifest` |
 | PS4 legacy | `6/cache.manifest` |
-| PS4 modern | `11/cache.appcache` |
+| PS4 modern | `13/cache.appcache` |
 | PS5 | `ps5/cache.manifest` |
 
 Cache harus dibuat atau diperbarui ketika server masih dapat diakses. Setelah file JavaScript, CSS, HTML, payload, offset, atau patch berubah, perbarui versi komentar manifest atau regenerasi manifest agar browser mendeteksi perubahan.
