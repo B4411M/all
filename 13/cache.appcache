@@ -1,0 +1,21 @@
+CACHE MANIFEST
+# B41M app cache
+# Updated: 2026-09-14
+
+CACHE:
+index.html
+lapse.html
+poops.html
+logo.png
+sw.js
+core.mjs
+mem.mjs
+int64.mjs
+ps4_offsets.mjs
+chain_lapse.mjs
+chain_poops.mjs
+
+NETWORK:
+*
+
+FALLBACK:

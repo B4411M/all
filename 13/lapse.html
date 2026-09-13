@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="logo.png" type="image/png">
+<title>B41M / lapse</title>
+<style>
+:root {
+  --bg: #050b0c;
+  --bg-2: #0c1718;
+  --panel: rgba(9, 17, 18, 0.95);
+  --line: rgba(116, 169, 145, 0.2);
+  --text: #eafef3;
+  --muted: #9bc5b1;
+  --soft: #6d897d;
+  --green: #8df2b7;
+  --green-strong: #46ec9b;
+  --warn: #dfe67c;
+  --err: #ff8e7c;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  background:
+    radial-gradient(circle at top, rgba(70, 236, 155, 0.08), transparent 30%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  color: var(--text);
+  font: 14px/1.6 Arial, sans-serif;
+}
+
+.shell {
+  width: min(900px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 18px 44px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.02);
+  padding: 22px 20px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shell::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green-strong), rgba(70,236,155,0.12));
+}
+
+#title {
+  font-size: 12px;
+  color: var(--green);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+#sep {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0 0 18px;
+}
+
+#state {
+  font-size: 27px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+#out {
+  white-space: pre-wrap;
+  font: 11px/1.75 "SFMono-Regular", "Consolas", monospace;
+  color: var(--muted);
+  max-height: 60vh;
+  overflow-y: auto;
+  word-break: break-all;
+  background: rgba(11, 18, 19, 0.8);
+  border: 1px solid rgba(116,169,145,0.18);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+#out .ok { color: var(--text); }
+#out .warn { color: var(--warn); }
+#out .err { color: var(--err); }
+#out .dim { color: var(--soft); }
+
+@media (max-width: 560px) {
+  body { padding: 18px 12px; }
+  .shell { padding: 18px 14px; }
+  #title { letter-spacing: 0.12em; }
+  #state { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<div id="title">B41M / lapse</div>
+
+<hr id="sep">
+
+<!-- chain_lapse.mjs writes to #state and #out -->
+<div id="state">loading…</div>
+<div id="out"></div>
+</div>
+
+<script type="module" src="chain_lapse.mjs"></script>
+</body>
+</html>
