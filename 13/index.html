@@ -150,7 +150,7 @@ a:hover { color: var(--green-strong); }
 
 <hr id="sep">
 
-<div id="note" id="v-note"></div>
+<div id="note"></div>
 </div>
 
 <script type="module">
@@ -180,7 +180,8 @@ if (!isPS4) {
         $("v-note").textContent = "supported: 9.00 – 13.52";
     } else {
         const fw_n = parseInt(key.split(".")[0]) * 100 + parseInt(key.split(".")[1]);
-        const chain = fw_n <= 1202 ? "lapse" : "poops";
+        const bugMatch = off.fw_status && off.fw_status.match(/(?:^|\s)bug=(lapse|poops)(?:\s|$)/);
+        const chain = bugMatch ? bugMatch[1] : (fw_n <= 1202 ? "lapse" : "poops");
         const target = chain === "lapse" ? "lapse.html" : "poops.html";
 
         set("v-ch",  chain, "ok");

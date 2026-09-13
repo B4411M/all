@@ -1,5 +1,5 @@
 /* mansoor0x · polpNO-MX · Service Worker */
-const V = "polpno-mx-1";
+const V = "polpno-mx-2";
 const FILES = [
     "/", "/index.html", "/lapse.html", "/poops.html",
     "/chain_lapse.mjs", "/chain_poops.mjs",
