@@ -1093,6 +1093,17 @@ export const PS4 = {
 //
 // A copy rather than a shared reference, so its fw_status can say where the
 // data came from without rewriting 12.00's.
+
+PS4["11.52"] = Object.assign({}, PS4["11.50"], {
+    alias_of: "11.50",
+    fw_status: "state=UNTESTED-on-hardware shares=11.50 "
+        + "webkit=assumed-identical-to-11.50 "
+        + "kernel_rvas=untested-vs-dump "
+        + "kpatch=1150.bin",
+    kpatch: "1150.bin",
+});
+
+
 PS4["12.02"] = Object.assign({}, PS4["12.00"], {
     alias_of: "12.00",
     fw_status: "state=UNTESTED-on-hardware shares=12.00 "
