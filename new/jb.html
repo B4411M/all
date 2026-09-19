@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" manifest="cache.appcache">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>B41M</title>
+    <style>
+      :root {
+        --matrix: #00ff66;
+        --matrix-dim: #0a9f45;
+        --matrix-dark: #06351c;
+        --ink: #020804;
+        --panel: rgba(2, 15, 8, 0.9);
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        background: var(--ink);
+        color: var(--matrix);
+        font: 15px/1.45 "Courier New", monospace;
+      }
+      body { position: relative; overflow-x: hidden; }
+      body:before {
+        position: fixed;
+        z-index: 0;
+        inset: 0;
+        pointer-events: none;
+        content: "";
+        opacity: 0.2;
+        background-image: linear-gradient(var(--matrix-dark) 1px, transparent 1px),
+          linear-gradient(90deg, var(--matrix-dark) 1px, transparent 1px);
+        background-size: 32px 32px;
+      }
+      body:after {
+        position: fixed;
+        z-index: 3;
+        inset: 0;
+        pointer-events: none;
+        content: "";
+        background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0,
+          rgba(0, 0, 0, 0.12) 1px, transparent 1px, transparent 4px);
+      }
+      #brand, #wrap { position: relative; z-index: 1; }
+      #brand {
+        padding: 18px 10px 15px;
+        text-align: center;
+        background: var(--panel);
+        border-bottom: 1px solid var(--matrix-dim);
+        box-shadow: 0 0 22px rgba(0, 255, 102, 0.16);
+      }
+      #brand:after {
+        display: block;
+        width: 130px;
+        height: 2px;
+        margin: 13px auto 0;
+        content: "";
+        background: var(--matrix);
+        box-shadow: 0 0 10px var(--matrix);
+      }
+      #brand img {
+        width: 34px;
+        height: 34px;
+        margin-right: 10px;
+        border: 1px solid var(--matrix-dim);
+        border-radius: 50%;
+        vertical-align: middle;
+        filter: hue-rotate(75deg) saturate(1.7);
+      }
+      #brand b {
+        color: var(--matrix);
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-shadow: 0 0 8px var(--matrix);
+        vertical-align: middle;
+      }
+
+      /* Running: jb.js sets body.done / body.fail / body.log. */
+      #spin {
+        position: fixed;
+        top: calc(50% + 20px);
+        left: 50%;
+        width: 46px;
+        height: 46px;
+        margin: -23px 0 0 -23px;
+        border: 4px solid var(--matrix-dark);
+        border-top-color: var(--matrix);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #msg {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
+        color: var(--matrix);
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 8px rgba(0, 255, 102, 0.7);
+        display: none;
+      }
+      #wrap { padding: 0; }
+      #state,
+      #out {
+        display: none;
+      }
+
+      body.done #spin {
+        display: none;
+      }
+      body.fail #spin {
+        display: none;
+      }
+      body.fail #msg {
+        display: block;
+      }
+
+      /* ?log=1 -- the full step log. */
+      body.log #spin,
+      body.log #msg {
+        display: none;
+      }
+      body.log #wrap {
+        max-width: 680px;
+        margin: 26px auto;
+        padding: 25px 28px;
+        border: 1px solid var(--matrix-dim);
+        background: var(--panel);
+        box-shadow: 0 0 28px rgba(0, 255, 102, 0.12), inset 0 0 24px rgba(0, 255, 102, 0.04);
+      }
+      body.log #wrap:before {
+        display: block;
+        margin-bottom: 18px;
+        content: "// B41M SYSTEM CONSOLE";
+        color: var(--matrix-dim);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+      }
+      body.log #state {
+        display: block;
+        margin: 0 0 10px;
+        color: var(--matrix);
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-shadow: 0 0 8px rgba(0, 255, 102, 0.7);
+      }
+      body.log #state:before {
+        content: ">_ ";
+        color: var(--matrix-dim);
+      }
+      body.log #out {
+        display: block;
+        white-space: pre-wrap;
+        min-height: 220px;
+        padding: 14px 16px;
+        color: #8cffad;
+        font: 12px/1.45 "Courier New", monospace;
+        background: rgba(0, 8, 3, 0.75);
+        border: 1px solid var(--matrix-dark);
+        height: calc(100vh - 141px);
+        overflow-y: auto;
+      }
+      .ok, .safe { color: #8cffad; }
+      .bad, .danger { color: #ff536b; text-shadow: 0 0 8px rgba(255, 83, 107, 0.7); }
+      .warn { color: #d8ff58; text-shadow: 0 0 8px rgba(216, 255, 88, 0.55); }
+      code { color: var(--matrix); }
+      @media (max-width: 520px) {
+        #brand b { font-size: 20px; }
+        body.log #wrap { margin: 18px 12px; padding: 20px 18px; }
+        body.log #state { font-size: 18px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="brand">
+      <img
+        src="logo.png"
+        alt="B41M"
+        width="28"
+        height="28"
+      /><b>B41M</b>
+    </div>
+    <div id="spin"></div>
+    <div id="msg">Restart your console</div>
+    <div id="wrap">
+      <div id="state"></div>
+      <div id="out"></div>
+    </div>
+    <script type="module">
+      import "./jb.js?v=10";
+    </script>
+  </body>
+</html>

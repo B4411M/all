@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B41M </title>
+<style>
+    :root { --matrix:#00ff66; --matrix-dim:#0a9f45; --matrix-dark:#06351c;
+                    --ink:#020804; --panel:rgba(2, 15, 8, .9); }
+    * { box-sizing:border-box; }
+    html, body { min-height:100%; margin:0; padding:0; background:var(--ink);
+                             color:var(--matrix); font:15px/1.45 "Courier New", monospace; }
+    body { position:relative; overflow-x:hidden; }
+    body:before { position:fixed; z-index:0; inset:0; pointer-events:none; content:"";
+                                opacity:.2; background-image:linear-gradient(var(--matrix-dark) 1px, transparent 1px),
+                                linear-gradient(90deg, var(--matrix-dark) 1px, transparent 1px);
+                                background-size:32px 32px; }
+    body:after { position:fixed; z-index:3; inset:0; pointer-events:none; content:"";
+                             background:repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0,
+                             rgba(0,0,0,.12) 1px, transparent 1px, transparent 4px); }
+    #brand, #wrap { position:relative; z-index:1; }
+    #brand { padding:18px 10px 15px; text-align:center; background:var(--panel);
+                     border-bottom:1px solid var(--matrix-dim); box-shadow:0 0 22px rgba(0,255,102,.16); }
+    #brand:after { display:block; width:130px; height:2px; margin:13px auto 0;
+                                 content:""; background:var(--matrix); box-shadow:0 0 10px var(--matrix); }
+    #brand img { width:34px; height:34px; margin-right:10px; border:1px solid var(--matrix-dim);
+                             border-radius:50%; vertical-align:middle; filter:hue-rotate(75deg) saturate(1.7); }
+    #brand b { font-size:24px; font-weight:700; letter-spacing:.22em; color:var(--matrix);
+                         text-shadow:0 0 8px var(--matrix); vertical-align:middle; }
+    #wrap { max-width:680px; margin:26px auto; padding:25px 28px; border:1px solid var(--matrix-dim);
+                    background:var(--panel); box-shadow:0 0 28px rgba(0,255,102,.12), inset 0 0 24px rgba(0,255,102,.04); }
+    #wrap:before { display:block; margin-bottom:18px; content:"// B41M SYSTEM CONSOLE"; color:var(--matrix-dim);
+                                 font-size:11px; letter-spacing:.16em; }
+    #state { margin:0 0 10px; color:var(--matrix); font-size:22px; font-weight:700;
+                     letter-spacing:.04em; text-shadow:0 0 8px rgba(0,255,102,.7); }
+    #state:before { content:">_ "; color:var(--matrix-dim); }
+    #det { margin:0 0 6px; color:#79c995; font-size:13px; }
+    #det b { color:var(--matrix); font-weight:700; }
+    #cache { min-height:18px; margin:0 0 2px; color:#43885b; font-size:12px; }
+    #cache.cacheok { color:#8cffad; }
+    .ok { color:#8cffad; } .bad { color:#ff536b; text-shadow:0 0 8px rgba(255,83,107,.7); }
+    .warn { color:#d8ff58; text-shadow:0 0 8px rgba(216,255,88,.55); }
+    @media (max-width:520px) {
+        #wrap { margin:18px 12px; padding:20px 18px; }
+        #brand b { font-size:20px; }
+        #state { font-size:18px; }
+    }
+</style>
+</head>
+<body>
+<div id="brand"><img src="logo.png" alt="B41M" width="28" height="28"><b>B41M</b></div>
+<div id="wrap">
+  <div id="state">detecting firmware...</div>
+  <div id="det"></div>
+  <div id="cache"></div>
+</div>
+
+<script>
+(function () {
+    var stateEl = document.getElementById("state");
+    var detEl = document.getElementById("det");
+    var cacheEl = document.getElementById("cache");
+    function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
+    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    var params = new URLSearchParams(location.search);
+
+    // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
+    // own kernel-table-present gate, so this is UX only -- an unlisted firmware
+    // can still be launched with a tap. KEEP IN SYNC with ps4_offsets.js: add a
+    // fwnum here in the SAME commit that fills that firmware's kernel RVAs.
+    // The PS4 reports its minor as two hex digits in the UA (13.52 -> minor 0x52).
+    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 }; // all measured on hardware
+
+    var key = null, fwnum = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    if (m) {
+        var ms = parseInt(m[2], 16).toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
+    }
+
+    var forced = params.get("force") === "1";
+    var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
+    detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
+        + (supported ? " &middot; <b>supported</b>"
+                     : " &middot; not in this build's kernel table");
+
+    var target = "jb.html" + location.search;
+    function go() { setState("loading jailbreak...", "warn"); location.replace(target); }
+
+    function waitForTap(msg, action) {
+        setState(msg, "warn");
+        function fire() {
+            window.removeEventListener("click", fire);
+            window.removeEventListener("keydown", fire);
+            action();
+        }
+        window.addEventListener("click", fire);
+        window.addEventListener("keydown", fire);
+    }
+
+    // Off-target consoles are not launched automatically -- one tap still runs
+    // it, so a user-agent quirk on the real 13.52 console can never lock it out.
+    if (!supported) {
+        setState("UNSUPPORTED FIRMWARE", "bad");
+        waitForTap("UNSUPPORTED (" + (key || "unknown") + ") -- press X or tap to run anyway", go);
+        return;
+    }
+
+    var ac = window.applicationCache;
+    if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        go();
+    } else if (!navigator.onLine) {
+        setCache("offline -- from cache", true);
+        go();
+    } else if (ac.status === ac.IDLE) {
+        setCache("cached", true);
+        go();
+    } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        setCache("update downloaded", true);
+        waitForTap("UPDATE READY -- press X or tap to reload & run",
+                   function () { location.reload(); });
+    } else {
+        setCache("checking cache...");
+        ac.addEventListener("downloading",
+            function () { setCache("caching for offline (first run)..."); }, false);
+        ac.addEventListener("progress", function (e) {
+            if (e && e.total)
+                setCache("caching " + Math.round((e.loaded / e.total) * 100) + "%");
+        }, false);
+        ac.addEventListener("cached", function () {
+            setCache("cached for offline use", true);
+            waitForTap("CACHED (first run) -- press X or tap to run", go);
+        }, false);
+        ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            setCache("update downloaded", true);
+            waitForTap("UPDATE READY -- press X or tap to reload & run",
+                       function () { location.reload(); });
+        }, false);
+        ac.addEventListener("noupdate", function () {
+            setCache("cached -- offline ready", true);
+            go();
+        }, false);
+        ac.addEventListener("error", function () {
+            setCache("cache unavailable");
+            waitForTap("CACHE FAILED -- press X or tap to run anyway", go);
+        }, false);
+        ac.addEventListener("obsolete", function () {
+            setCache("cache obsolete");
+            waitForTap("CACHE OBSOLETE -- press X or tap to run", go);
+        }, false);
+    }
+})();
+</script>
+</body>
+</html>
