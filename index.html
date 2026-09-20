@@ -46,14 +46,21 @@
       <a href="6/index.html">
         <div class="range">6.00 – 11.02</div>
         <h2>WebKit Legacy</h2>
-        <p class="desc">Host untuk firmware PS4 6.00 sampai 11.02, dengan pilihan chain NetCtrl atau Lapse.</p>
+        <p class="desc">Host untuk firmware PS4 6.00 sampai 11.02.</p>
         <span class="open">HOST TERSEDIA</span>
       </a>
 
-      <a href="pop/index.html">
-        <div class="range">11.50 – 13.52</div>
-        <h2>WebKit Modern</h2>
-        <p class="desc">Host untuk firmware 11.50 sampai 13.04 (11.50, 11.52, 12.00, 12.02, 12.50, 12.52, 13.00, 13.02, 13.04, 13.50, 13.52). Metode dipilih otomatis berdasarkan firmware yang terdeteksi.</p>
+      <a href="1113/index.html">
+        <div class="range">11.50 – 13.00</div>
+        <h2>WebKit Modern 11-13</h2>
+        <p class="desc">Host untuk firmware 11.50 sampai 13.00.</p>
+        <span class="open">HOST TERSEDIA</span>
+      </a>
+
+      <a href="gd/index.html">
+        <div class="range">13.02 – 13.52</div>
+        <h2>WebKit GD</h2>
+        <p class="desc">Host untuk firmware 13.02 sampai 13.52.</p>
         <span class="open">HOST TERSEDIA</span>
       </a>
     </section>
@@ -75,12 +82,20 @@
       var changeButton = document.getElementById("change-choice");
       var savedChoice, detectedFirmware;
       var supportedFirmware = {
-        "11.00": "6/index.html", "11.50": "pop/index.html", "11.52": "pop/index.html",
-        "12.00": "pop/index.html", "12.02": "pop/index.html", "13.04": "pop/index.html",
-        "12.50": "pop/index.html", "12.52": "pop/index.html", "13.50": "pop/index.html",
-        "13.00": "pop/index.html", "13.02": "pop/index.html", "13.52": "pop/index.html"
+        "6.00": "6/index.html", "6.02": "6/index.html", "6.10": "6/index.html", "6.20": "6/index.html", "6.50": "6/index.html", "6.51": "6/index.html", "6.70": "6/index.html", "6.71": "6/index.html", "6.72": "6/index.html",
+        "7.00": "6/index.html", "7.01": "6/index.html", "7.02": "6/index.html", "7.50": "6/index.html", "7.51": "6/index.html", "7.55": "6/index.html",
+        "8.00": "6/index.html", "8.01": "6/index.html", "8.03": "6/index.html", "8.50": "6/index.html", "8.52": "6/index.html",
+        "9.00": "6/index.html", "9.03": "6/index.html", "9.04": "6/index.html", "9.50": "6/index.html", "9.51": "6/index.html", "9.60": "6/index.html",
+        "10.00": "6/index.html", "10.01": "6/index.html", "10.50": "6/index.html",
+        "11.00": "6/index.html", "11.02": "6/index.html",
+        "11.50": "1113/index.html", "11.52": "1113/index.html",
+        "12.00": "1113/index.html", "12.02": "1113/index.html",
+        "12.50": "1113/index.html", "12.52": "1113/index.html",
+        "13.00": "1113/index.html",
+        "13.02": "gd/index.html", "13.04": "gd/index.html",
+        "13.50": "gd/index.html", "13.52": "gd/index.html"
       };
-      var legacyFirmware = /^(6|7|8|9|10|11)\./;
+      var legacyFirmware = /^(6|7|8|9|10|11\.0[0-2])$/;
 
       function detectFirmware() {
         var match = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
@@ -110,7 +125,7 @@
       try { if (!detectedFirmware && !savedChoice) savedChoice = localStorage.getItem(choiceKey); } catch (e) {}
       var renamedHosts = {
         "Webkit6-11.02/index.html": "6/index.html",
-        "Webkit11.50-13.04/index.html": "pop/index.html"
+        "Webkit11.50-13.04/index.html": "1113/index.html"
       };
       if (renamedHosts[savedChoice]) {
         savedChoice = renamedHosts[savedChoice];
