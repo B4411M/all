@@ -51,6 +51,8 @@ const SHOW_LOG = params.get("log") === "1";
 if (SHOW_LOG && document.body) document.body.className = "log";
 function finishUI(ok) {
   if (SHOW_LOG || !document.body) return;
+const msgEl = document.getElementById("msg");
+  if (msgEl) msgEl.textContent = ok ? "Done" : "Wait";
   document.body.className = ok ? "done" : "fail";
 }
 function mark(tag, detail) {
