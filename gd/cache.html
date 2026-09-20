@@ -1,0 +1,73 @@
+<html manifest="cache.appcache">
+<head>
+<title>B41M · PS4 Exploit</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    background-color: #030805;
+    background-image: linear-gradient(rgba(57, 255, 136, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(57, 255, 136, 0.14) 1px, transparent 1px),
+        radial-gradient(circle at 50% 45%, #12351f 0, #030805 58%);
+    background-size: 32px 32px, 32px 32px, 100% 100%;
+    color: #9cffbf;
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+}
+.info {
+    width: min(90vw, 620px);
+    margin: 24px;
+    padding: 30px 24px;
+    border: 1px solid rgba(57, 255, 136, 0.42);
+    border-left: 4px solid #39ff88;
+    background: rgba(3, 8, 5, 0.82);
+    box-shadow: 0 0 30px rgba(57, 255, 136, 0.16);
+    font-size: 22px;
+    font-family: monospace;
+    color: #39ff88;
+    letter-spacing: 0.05em;
+}
+
+.info::before {
+    content: "B41M // CACHE MODULE\A";
+    display: block;
+    color: #4b9d69;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    line-height: 2;
+    white-space: pre;
+}
+</style>
+<script>
+history.replaceState(null, null, 'index.html');
+var histlength = history.length;
+history.go(-histlength);
+
+function DLProgress(e) {
+    var pct = Math.round(e.loaded / e.total * 100);
+    msgs.innerHTML = "B41M · Installing ... " + pct + "%";
+}
+
+function DisplayCacheProgress() {
+    setTimeout(function () {
+        msgs.innerHTML = "B41M · Cache OK";
+    }, 2000);
+    setTimeout(function () {
+        location.reload();
+    }, 3000);
+}
+
+window.applicationCache.addEventListener("progress",    DLProgress,           false);
+window.applicationCache.oncached     = function (e) { DisplayCacheProgress(); };
+window.applicationCache.onupdateready = function (e) { DisplayCacheProgress(); };
+</script>
+</head>
+<body>
+<div id="msgs" class="info"></div>
+</body>
+</html>
