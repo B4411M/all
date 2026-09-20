@@ -11,9 +11,19 @@ let passCount = 0,
 const params = new URLSearchParams(location.search);
 const STOP_BEFORE_DOUBLE = params.get("stop") === "beforedouble";
 
-// No-op: log sink intentionally disabled. Logs stay on-device (and, when
-// ?log=1 is set, in the on-screen #out div rendered by mark()).
-function post(_tag, _detail) {}
+function post(tag, detail) {
+  try {
+    const x = new XMLHttpRequest();
+    x.open("POST", "/t", true);
+    x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    x.send(
+      "PS4-JB&tag=" +
+        encodeURIComponent(tag) +
+        "&detail=" +
+        encodeURIComponent(String(detail == null ? "" : detail)),
+    );
+  } catch (e) {}
+}
 
 const VERBOSE = params.get("verbose") === "1";
 const PROSE = [
@@ -3353,64 +3363,5 @@ let allDone = false,
     try {
       finishUI(payloadRunning);
     } catch (eUI) {}
-    // After a clean payload run, expose a one-tap way to grab the URL/command
-    // needed to push ps4debug-ng into the console's payload receiver (:9090).
-    // The button only appears on a successful run so a botched attempt doesn't
-    // hand a caller-to-load ps4debug when the console isn't jailbroken yet.
-    if (payloadRunning) {
-      try {
-        showPs4DebugPanel();
-      } catch (eDbg) {}
-    }
-  }
-
-  // ---- ps4debug follow-up UI ----
-  function showPs4DebugPanel() {
-    if (document.getElementById("ps4debug-panel")) return;
-    const host =
-      document.getElementById("wrap") || document.getElementById("out") || document.body;
-    if (!host) return;
-
-    const panel = document.createElement("div");
-    panel.id = "ps4debug-panel";
-    panel.style.cssText =
-      "margin:14px 0; padding:12px 14px; background:#0e1116;" +
-      "border:1px solid #1e2732; border-radius:4px;" +
-      'font:13px/1.45 "Segoe UI",system-ui,sans-serif; color:#c8ced8;';
-
-    const abs = new URL("ps4debug.bin", location.href).href;
-
-    panel.innerHTML =
-      '<button id="ps4debug-btn" type="button" style="' +
-      "padding:8px 14px; font:600 13px system-ui; background:#7fa0c6;" +
-      "color:#0b0d10; border:0; border-radius:4px; cursor:pointer;" +
-      'letter-spacing:.06em;">Load ps4debug</button>' +
-      '<div id="ps4debug-body" hidden style="margin-top:10px;">' +
-      '<div style="color:#8b95a3; margin-bottom:6px;">' +
-      "Send <code>ps4debug.bin</code> to GoldHEN's payload port (<code>:9090</code>). " +
-      "Browsers can't open raw TCP; the console has to receive it from a real socket:" +
-      "</div>" +
-      '<div style="background:#05070a; padding:8px 10px; border-radius:3px;' +
-      'font-family:Consolas,monospace; font-size:12px; color:#9fb3d0;' +
-      'overflow-x:auto; white-space:nowrap;" id="ps4debug-cmd">' +
-      "curl -sL " +
-      abs +
-      " | nc &lt;your-ps4-ip&gt; 9090" +
-      "</div>" +
-      '<div style="margin-top:6px; color:#5c6672; font-size:11px;">' +
-      "Also served at <a href=\"" +
-      abs +
-      '" style="color:#7fa0c6; text-decoration:none;">' +
-      abs +
-      "</a> if you'd rather use a payload sender." +
-      "</div>" +
-      "</div>";
-
-    host.appendChild(panel);
-
-    document.getElementById("ps4debug-btn").addEventListener("click", function () {
-      const body = document.getElementById("ps4debug-body");
-      body.hidden = !body.hidden;
-    });
   }
 })();
