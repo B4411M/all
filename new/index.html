@@ -5,46 +5,41 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>B41M </title>
 <style>
-    :root { --matrix:#00ff66; --matrix-dim:#0a9f45; --matrix-dark:#06351c;
-                    --ink:#020804; --panel:rgba(2, 15, 8, .9); }
+    :root { --ink:#071018; --panel:#101d28; --panel-soft:#142634; --line:#294556;
+            --cyan:#78e6e0; --lime:#d3f36b; --muted:#8ca6b2; --danger:#ff7890; }
     * { box-sizing:border-box; }
-    html, body { min-height:100%; margin:0; padding:0; background:var(--ink);
-                             color:var(--matrix); font:15px/1.45 "Courier New", monospace; }
+    html,body { min-height:100%; margin:0; background:var(--ink); color:#e8f5f4;
+                font:15px/1.5 "Trebuchet MS", sans-serif; }
     body { position:relative; overflow-x:hidden; }
-    body:before { position:fixed; z-index:0; inset:0; pointer-events:none; content:"";
-                                opacity:.2; background-image:linear-gradient(var(--matrix-dark) 1px, transparent 1px),
-                                linear-gradient(90deg, var(--matrix-dark) 1px, transparent 1px);
-                                background-size:32px 32px; }
-    body:after { position:fixed; z-index:3; inset:0; pointer-events:none; content:"";
-                             background:repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0,
-                             rgba(0,0,0,.12) 1px, transparent 1px, transparent 4px); }
-    #brand, #wrap { position:relative; z-index:1; }
-    #brand { padding:18px 10px 15px; text-align:center; background:var(--panel);
-                     border-bottom:1px solid var(--matrix-dim); box-shadow:0 0 22px rgba(0,255,102,.16); }
-    #brand:after { display:block; width:130px; height:2px; margin:13px auto 0;
-                                 content:""; background:var(--matrix); box-shadow:0 0 10px var(--matrix); }
-    #brand img { width:34px; height:34px; margin-right:10px; border:1px solid var(--matrix-dim);
-                             border-radius:50%; vertical-align:middle; filter:hue-rotate(75deg) saturate(1.7); }
-    #brand b { font-size:24px; font-weight:700; letter-spacing:.22em; color:var(--matrix);
-                         text-shadow:0 0 8px var(--matrix); vertical-align:middle; }
-    #wrap { max-width:680px; margin:26px auto; padding:25px 28px; border:1px solid var(--matrix-dim);
-                    background:var(--panel); box-shadow:0 0 28px rgba(0,255,102,.12), inset 0 0 24px rgba(0,255,102,.04); }
-    #wrap:before { display:block; margin-bottom:18px; content:"// B41M SYSTEM CONSOLE"; color:var(--matrix-dim);
-                                 font-size:11px; letter-spacing:.16em; }
-    #state { margin:0 0 10px; color:var(--matrix); font-size:22px; font-weight:700;
-                     letter-spacing:.04em; text-shadow:0 0 8px rgba(0,255,102,.7); }
-    #state:before { content:">_ "; color:var(--matrix-dim); }
-    #det { margin:0 0 6px; color:#79c995; font-size:13px; }
-    #det b { color:var(--matrix); font-weight:700; }
-    #cache { min-height:18px; margin:0 0 2px; color:#43885b; font-size:12px; }
-    #cache.cacheok { color:#8cffad; }
-    .ok { color:#8cffad; } .bad { color:#ff536b; text-shadow:0 0 8px rgba(255,83,107,.7); }
-    .warn { color:#d8ff58; text-shadow:0 0 8px rgba(216,255,88,.55); }
-    @media (max-width:520px) {
-        #wrap { margin:18px 12px; padding:20px 18px; }
-        #brand b { font-size:20px; }
-        #state { font-size:18px; }
-    }
+    body:before { position:fixed; inset:0; pointer-events:none; content:"";
+                  background:radial-gradient(circle at 15% 10%, rgba(120,230,224,.12), transparent 30%),
+                              linear-gradient(135deg, #071018 0%, #0b1720 55%, #132a31 100%); }
+    body:after { position:fixed; inset:0; pointer-events:none; content:""; opacity:.22;
+                 background-image:linear-gradient(rgba(120,230,224,.08) 1px, transparent 1px),
+                                   linear-gradient(90deg, rgba(120,230,224,.08) 1px, transparent 1px);
+                 background-size:48px 48px; mask-image:linear-gradient(to bottom, black, transparent 80%); }
+    #brand { position:relative; z-index:1; display:flex; align-items:center; gap:14px;
+             max-width:720px; margin:0 auto; padding:28px 24px 22px; border-bottom:1px solid var(--line); }
+    #brand img { width:42px; height:42px; border:1px solid var(--cyan); border-radius:12px; filter:saturate(.8); }
+    #brand b { display:block; color:var(--cyan); font:700 25px/1 "Trebuchet MS",sans-serif; letter-spacing:.18em; }
+    #brand:after { content:"FIRMWARE ROUTER / 01"; margin-left:auto; color:var(--muted); font:10px "Courier New",monospace; letter-spacing:.12em; }
+    #wrap { position:relative; z-index:1; max-width:720px; margin:42px auto; padding:32px;
+            border:1px solid var(--line); border-radius:18px; background:rgba(16,29,40,.92);
+            box-shadow:0 22px 70px rgba(0,0,0,.28); }
+    #wrap:before { display:block; margin-bottom:24px; content:"B41M / MODERN HOST"; color:var(--lime);
+                   font:11px "Courier New",monospace; letter-spacing:.18em; }
+    #state { margin:0 0 12px; color:#f3fbf8; font-size:clamp(24px,5vw,38px); line-height:1.05;
+             font-weight:700; letter-spacing:-.02em; }
+    #state:before { content:"●"; margin-right:10px; color:var(--lime); font-size:.55em; vertical-align:middle; }
+    #det { display:inline-block; margin:0 0 20px; padding:7px 10px; border:1px solid #375768;
+           border-radius:7px; color:var(--muted); font:12px "Courier New",monospace; }
+    #det b { color:var(--cyan); font-weight:700; }
+    #cache { min-height:22px; padding-top:18px; border-top:1px solid rgba(140,166,178,.2);
+             color:var(--muted); font:12px "Courier New",monospace; }
+    #cache.cacheok { color:var(--lime); }
+    .bad { color:var(--danger)!important; } .warn { color:var(--lime)!important; }
+    @media (max-width:560px) { #brand { padding:22px 16px 18px; } #brand:after { display:none; }
+      #wrap { margin:26px 14px; padding:24px 20px; } }
 </style>
 </head>
 <body>
