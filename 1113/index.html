@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" manifest="cache.manifest">
+<html lang="id" manifest="cache.appcache">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -249,10 +249,16 @@ body{
 
     var target = (bug === "lapse" ? "run_lapse.html" : "run_poops.html")
         + location.search;
-    function go() { setState("loading " + bug + " chain...", "warn");
-                    location.replace(target); }
+    var redirected = false;
+    function go() {
+      if (redirected) return;
+      redirected = true;
+      setState("loading " + bug + " chain...", "warn");
+      location.replace(target);
+    }
 
     var ac = window.applicationCache;
+    var redirectTimer = window.setTimeout(go, 3000);
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
         go();
     } else if (!navigator.onLine) {
