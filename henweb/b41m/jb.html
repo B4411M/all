@@ -51,25 +51,29 @@
       #brand {
         position: relative;
         z-index: 1;
-        text-align: center;
-        padding: 12px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        min-height: 68px;
+        box-sizing: border-box;
+        padding: 12px 28px;
         background: rgba(2, 7, 4, 0.96);
         border-bottom: 1px solid #204a31;
       }
       #brand img {
-        width: 28px;
-        height: 28px;
-        margin-right: 8px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
-        vertical-align: middle;
+        flex: 0 0 40px;
       }
       #brand b {
-        font-size: 14px;
+        font-size: 19px;
+        line-height: 1.2;
         font-weight: 700;
         letter-spacing: 0;
         color: #42f29a;
         font-family: "Helvetica Neue", Helvetica, sans-serif;
-        vertical-align: middle;
         text-shadow: 0 0 8px rgba(66, 242, 154, 0.38);
       }
 
@@ -242,7 +246,17 @@
 
       @media (max-width: 600px) {
         #brand {
-          padding-top: 42px;
+          min-height: 94px;
+          padding: 44px 16px 12px;
+          gap: 9px;
+        }
+        #brand img {
+          width: 32px;
+          height: 32px;
+          flex-basis: 32px;
+        }
+        #brand b {
+          font-size: 16px;
         }
         body.log #wrap {
           width: calc(100% - 24px);
