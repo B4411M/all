@@ -10,16 +10,51 @@
         margin: 0;
         padding: 0;
         min-height: 100%;
-        background: #030805;
+        background: #020704;
         color: #e8fff0;
-        font: 16px/1.5 "Courier New", monospace;
+        font: 15px/1.55 "Helvetica Neue", Helvetica, sans-serif;
         border-top: 4px solid #37ee91;
       }
+      .matrix-rain {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(55, 238, 145, 0.035) 0,
+          rgba(55, 238, 145, 0.035) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      }
+      .matrix-rain span {
+        position: absolute;
+        top: -120%;
+        color: #37ee91;
+        font-size: 12px;
+        line-height: 1.55;
+        opacity: 0.14;
+        text-shadow: 0 0 6px rgba(55, 238, 145, 0.45);
+        animation: matrix-fall 18s linear infinite;
+      }
+      .matrix-rain span:nth-child(1) { left: 7%; animation-delay: -8s; }
+      .matrix-rain span:nth-child(2) { left: 21%; animation-delay: -2s; animation-duration: 17s; color: #55d6a5; }
+      .matrix-rain span:nth-child(3) { left: 38%; animation-delay: -11s; animation-duration: 19s; color: #b6df67; }
+      .matrix-rain span:nth-child(4) { left: 57%; animation-delay: -5s; animation-duration: 16s; color: #45b982; }
+      .matrix-rain span:nth-child(5) { left: 73%; animation-delay: -13s; animation-duration: 18s; color: #76cfd0; }
+      .matrix-rain span:nth-child(6) { left: 91%; animation-delay: -3s; animation-duration: 15s; color: #9cda83; }
+      @keyframes matrix-fall {
+        to { transform: translateY(230vh); }
+      }
       #brand {
+        position: relative;
+        z-index: 1;
         text-align: center;
-        padding: 8px 10px;
-        background: #030805;
-        border-bottom: 1px solid #214a36;
+        padding: 12px 10px;
+        background: rgba(2, 7, 4, 0.96);
+        border-bottom: 1px solid #204a31;
       }
       #brand img {
         width: 28px;
@@ -29,25 +64,28 @@
         vertical-align: middle;
       }
       #brand b {
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 700;
-        letter-spacing: 0.14em;
+        letter-spacing: 0;
         color: #42f29a;
-        font-family: "Courier New", monospace;
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
         vertical-align: middle;
+        text-shadow: 0 0 8px rgba(66, 242, 154, 0.38);
       }
 
       /* running: a spinner under the brand. jb.js sets body.done / body.fail / body.log. */
       #spin {
         position: fixed;
+        z-index: 2;
         top: calc(50% + 20px);
         left: 50%;
         width: 46px;
         height: 46px;
         margin: -23px 0 0 -23px;
-        border: 4px solid #173624;
+        border: 4px solid #12351f;
         border-top-color: #42f29a;
         border-radius: 50%;
+        box-shadow: 0 0 12px rgba(55, 238, 145, 0.16);
         animation: spin 0.9s linear infinite;
       }
       @keyframes spin {
@@ -57,16 +95,22 @@
       }
       #msg {
         position: fixed;
+        z-index: 2;
         top: 50%;
         left: 0;
         right: 0;
         transform: translateY(-50%);
         text-align: center;
         font-size: 16px;
-        letter-spacing: 1px;
+        letter-spacing: 0;
+        font-weight: 600;
+        color: #42f29a;
+        text-shadow: 0 0 10px rgba(66, 242, 154, 0.42);
         display: none;
       }
       #wrap {
+        position: relative;
+        z-index: 1;
         padding: 0;
       }
       #state,
@@ -96,25 +140,54 @@
         display: none;
       }
       body.log #wrap {
-        padding: 14px 18px;
+        width: calc(100% - 40px);
+        max-width: 880px;
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 0 22px 20px;
+        background: rgba(3, 10, 6, 0.96);
+        border: 1px solid #204a31;
+        border-top: 2px solid #37ee91;
+        border-radius: 4px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
+      }
+      body.log #wrap::before {
+        content: "B41M / TERMINAL";
+        display: block;
+        margin: 0 -22px 16px;
+        padding: 12px 18px;
+        color: #91aa97;
+        background: rgba(2, 7, 4, 0.72);
+        border-bottom: 1px solid rgba(32, 74, 49, 0.8);
+        font: 11px/1.2 "Courier New", monospace;
       }
       body.log #state {
         display: block;
-        font-size: 22px;
+        font-size: 17px;
+        line-height: 1.4;
         font-weight: 700;
-        margin: 0 0 8px;
+        margin: 0 0 12px;
+        color: #42f29a;
+        text-shadow: 0 0 8px rgba(66, 242, 154, 0.3);
+      }
+      body.log #state::before {
+        content: "> ";
+        color: #91d9a8;
       }
       body.log #out {
         display: block;
         white-space: pre-wrap;
+        word-wrap: break-word;
         font:
-          12px/1.45 Consolas,
+          13px/1.6 Consolas,
+          "Courier New",
           monospace;
-        background: #07110a;
-        border: 1px solid #214a36;
-        border-radius: 4px;
-        padding: 10px 12px;
-        height: calc(100vh - 141px);
+        color: #c7dfce;
+        background: transparent;
+        border-top: 1px solid rgba(32, 74, 49, 0.8);
+        padding: 14px 0 0;
+        height: calc(100vh - 170px);
+        min-height: 240px;
         overflow-y: auto;
       }
       .ok {
@@ -146,12 +219,12 @@
         padding: 6px 9px;
 
         color: #42f29a;
-        background: rgba(3, 8, 5, 0.92);
+        background: rgba(2, 7, 4, 0.97);
 
         border:
-          1px solid #214a36;
+          1px solid #286743;
 
-        border-radius: 4px;
+        border-radius: 3px;
 
         font-family:
           "Courier New",
@@ -159,16 +232,45 @@
 
         font-size: 11px;
 
-        max-width: 92vw;
+        max-width: calc(100vw - 16px);
         overflow: hidden;
 
         text-overflow: ellipsis;
         white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+      }
+
+      @media (max-width: 600px) {
+        #brand {
+          padding-top: 42px;
+        }
+        body.log #wrap {
+          width: calc(100% - 24px);
+          padding: 0 16px 16px;
+        }
+        body.log #wrap::before {
+          margin: 0 -16px 14px;
+          padding: 11px 14px;
+        }
+        body.log #out {
+          height: calc(100vh - 168px);
+          min-height: 180px;
+          padding: 12px 0 0;
+          font-size: 11px;
+        }
       }
 
     </style>
   </head>
   <body>
+    <div class="matrix-rain" aria-hidden="true">
+      <span>1<br>0<br>1<br>1<br>0<br>0<br>1<br>0<br>1<br>0<br>1<br>1<br>0<br>1<br>0<br>0</span>
+      <span>0<br>1<br>0<br>0<br>1<br>1<br>0<br>1<br>0<br>1<br>0<br>0<br>1<br>0<br>1<br>1</span>
+      <span>1<br>1<br>0<br>1<br>0<br>1<br>0<br>0<br>1<br>0<br>1<br>1<br>0<br>0<br>1<br>0</span>
+      <span>0<br>0<br>1<br>0<br>1<br>0<br>1<br>1<br>0<br>1<br>0<br>0<br>1<br>1<br>0<br>1</span>
+      <span>1<br>0<br>0<br>1<br>1<br>0<br>1<br>0<br>0<br>1<br>1<br>0<br>1<br>0<br>0<br>1</span>
+      <span>0<br>1<br>1<br>0<br>0<br>1<br>0<br>1<br>1<br>0<br>0<br>1<br>0<br>1<br>1<br>0</span>
+    </div>
     <div id="ramBox">RAM: checking...</div>
     <div id="brand">
       <img
