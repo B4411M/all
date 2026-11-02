@@ -1140,7 +1140,7 @@ let allDone = false,
               return;
             }
             try { sessionStorage.removeItem("kv-kbase-retry"); } catch (e) {}
-            const kvb = await import("./hx_kevent.js?v=3");
+            const kvb = await import("./hx_kevent.js?v=9");
             const kvOk = await kvb.runKevent({
               p: p, sc: sc, callAddr: callAddr, bufAddr: bufAddr, errno: errno,
               webkitBase: webkitBase, libkernelBase: libkernelBase, G: G,
