@@ -66,6 +66,10 @@ NETWORK:
 *
 
 FALLBACK:
+# The launcher deliberately adds a cache-busting query string. AppCache
+# matches cached URLs exactly, so route those query-string launcher URLs to
+# the cached document while offline.
+/b41m/ /b41m/jb.html
 / /index.html
 """
     
