@@ -1,0 +1,56 @@
+CACHE MANIFEST
+
+# Version 1.0.0
+# Generated automatically by appcache_manifest_generator.py
+# DO NOT EDIT MANUALLY - Run this script to regenerate
+
+CACHE:
+
+# HTML files
+b41m/index.html
+b41m/jb.html
+index.html
+research/exploit.html
+
+# JavaScript files
+b41m/core.js
+b41m/hx1400_port.js
+b41m/hx_kevent.js
+b41m/hx_tables.js
+b41m/int64.js
+b41m/jb.js
+b41m/mem.js
+b41m/ps4_offsets.js
+b41m/rpc_worker.js
+research/hen14/hx_tables.js
+research/jordy_stage2_1400.js
+research/webkit_gadgets_1400.js
+
+# Binary files
+b41m/goldhen.bin
+b41m/goldhen13.bin
+b41m/hen.bin
+b41m/patches/1302.bin
+b41m/patches/1350.bin
+b41m/patches/1352.bin
+b41m/patches/1400.bin
+b41m/payload.bin
+b41m/payload2.bin
+research/hen14/1400.hex
+
+# JSON files
+research/hen14/hx_tables.json
+
+# Text files
+research/hen14/hx_tables_summary.txt
+
+# Other files
+appcache_manifest_generator.py
+cache.manifest
+
+
+NETWORK:
+*
+
+FALLBACK:
+/ /index.html
