@@ -652,9 +652,9 @@ PS4["14.00"] = Object.assign({}, PS4["13.52"], {
     "state=14.00-hx1400-dev " +
     "webkit=13.52-identical " +
     "kernel=provided-by-hx_tables.js " +
-    "not-for-raw13-full-jb",
+    "not-for-B41M-full-jb",
 
-  payload: "payload.bin",
+  payload: "goldhen13.bin",
   kpatch: "1400.bin",
 
   k_stubs: undefined,
