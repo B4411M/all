@@ -178,7 +178,7 @@ export const PS4 = {
     k_evf_cv: 0x784318,
     k_sysent_661: 0x110a760,
     k_jmp_rsi: 0x704d5,
-    payload: "payload11.bin",
+    payload: "goldhen.bin",
   },
   "12.00": {
     fw_status:
@@ -259,7 +259,7 @@ export const PS4 = {
     k_evf_cv: 0x784798,
     k_sysent_661: 0x110a760,
     k_jmp_rsi: 0x47b31,
-    payload: "payload11.bin",
+    payload: "goldhen.bin",
   },
   "13.00": {
     fw_status:
@@ -439,7 +439,7 @@ export const PS4 = {
     k_sysent_661: 0x110a760,
     k_jmp_rsi: 0x47b31,
     k_kl_lock: 0xe6c20,
-    payload: "payload11.bin",
+    payload: "goldhen.bin",
   },
 };
 
@@ -565,7 +565,7 @@ PS4["13.52"] = Object.assign({}, PS4["13.50"], {
 
   kpatch: "1352.bin",
 
-  payload: "payload.bin",
+  payload: "goldhen.bin",
   fw_status:
     "state=663-LIVE-on-hardware shares=13.50 (webkit+libkernel) " +
     "kernel_rvas=MEASURED-from-kernel_1352.elf (kdump5 tier1 36MB pass=39/0, " +
