@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>B41M Host Xploit</title>
+    <style>
+      :root {
+        --bg: #020604;
+        --panel: #050c08;
+        --sunk: #030805;
+        --line: #174329;
+        --fg: #b9d8c3;
+        --bright: #e0ffea;
+        --dim: #82a890;
+        --faint: #557261;
+        --ok: #00e676;
+        --bad: #ff746c;
+        --warn: #e6c46a;
+        --sans: Consolas, "DejaVu Sans Mono", monospace;
+        --mono: Consolas, "DejaVu Sans Mono", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--fg);
+        font: 15px/1.45 var(--sans);
+      }
+      #brand {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        border-left: 3px solid var(--ok);
+        background: var(--panel);
+        text-align: left;
+      }
+      #brand b {
+        color: var(--bright);
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      #ramBox {
+        overflow: hidden;
+        padding: 7px 14px;
+        border-bottom: 1px solid var(--line);
+        background: var(--sunk);
+        color: var(--ok);
+        font: 11px/1.4 var(--mono);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #spin {
+        position: fixed;
+        top: calc(50% + 20px);
+        left: 50%;
+        width: 46px;
+        height: 46px;
+        margin: -23px 0 0 -23px;
+        border: 4px solid var(--line);
+        border-top-color: var(--ok);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      #msg {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        display: none;
+        text-align: center;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+      }
+      #state,
+      #out {
+        display: none;
+      }
+      body.done #spin,
+      body.fail #spin {
+        display: none;
+      }
+      body.fail #msg {
+        display: block;
+      }
+      body.done #msg {
+        display: block;
+        color: var(--ok);
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+      body.log {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      body.log #spin,
+      body.log #msg {
+        display: none;
+      }
+      body.log #wrap {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        padding: 14px 14px 30px;
+      }
+      body.log #state {
+        display: block;
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      body.log #out {
+        display: block;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: var(--sunk);
+        font: 12px/1.45 var(--mono);
+        white-space: pre-wrap;
+      }
+      .notice {
+        margin: 1em 0;
+        padding: 0.7em 1em;
+        border: 2px solid #e66;
+        background: #2a1414;
+        color: #f99;
+        font: 700 20px/1.4 var(--sans);
+      }
+      .byline {
+        position: fixed;
+        bottom: 9px;
+        left: 11px;
+        margin: 0;
+        color: var(--faint);
+        font: 11px/1 var(--mono);
+        letter-spacing: 0.06em;
+      }
+      .ok {
+        color: var(--ok);
+      }
+      .bad {
+        color: var(--bad);
+      }
+      .warn {
+        color: var(--warn);
+      }
+      code {
+        color: #9fb3d0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="brand"><b>B41M Host Xploit</b></div>
+    <div id="ramBox">RAM: checking...</div>
+    <div id="spin"></div>
+    <div id="msg">Restart your console</div>
+    <div id="wrap">
+      <div id="state"></div>
+      <div id="out"></div>
+    </div>
+    <p class="byline">by B41M Host</p>
+    <script type="module">
+      import "./jb-g.js?v=1402s";
+    </script>
+  </body>
+</html>

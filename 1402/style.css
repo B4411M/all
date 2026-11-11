@@ -1,0 +1,153 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Consolas, "DejaVu Sans Mono", monospace;
+  color: #b7ffd1;
+  background: #000;
+}
+
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 34px 26px;
+  background: rgba(2, 8, 5, 0.94);
+  border-radius: 2px;
+  border: 1px solid rgba(0, 255, 112, 0.42);
+  box-shadow: 0 0 34px rgba(0, 255, 112, 0.12), inset 0 0 24px rgba(0, 255, 112, 0.035);
+  max-width: 500px;
+  width: calc(100% - 32px);
+  animation: terminal-in 500ms ease-out both;
+}
+
+.content::before {
+  display: block;
+  margin: -30px -34px 24px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0, 255, 112, 0.28);
+  color: #78ffad;
+  content: "B41M // HOST TERMINAL";
+  font: 11px/1.2 monospace;
+  letter-spacing: 0.12em;
+  text-align: left;
+}
+
+@keyframes terminal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  width: 144px;
+  height: auto;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 112, 0.56));
+}
+
+h1 {
+  color: #e2ffed;
+  font-family: Consolas, "DejaVu Sans Mono", monospace;
+  font-size: 1.75rem;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin-bottom: 9px;
+  text-shadow: 0 0 14px rgba(0, 255, 112, 0.45);
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  color: #9cc9aa;
+  margin-bottom: 20px;
+  font: 12px/1.6 monospace;
+  letter-spacing: 0.04em;
+}
+
+.count {
+  margin: 0 -34px -26px;
+  padding: 12px 14px;
+  border-top: 1px solid rgba(0, 255, 112, 0.22);
+  background: rgba(0, 255, 112, 0.035);
+  color: #76ffa5;
+  font-family: Consolas, "DejaVu Sans Mono", monospace;
+  min-height: 1.2em;
+  font-size: 0.82rem;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+#startBtn {
+  background: transparent;
+  border: 1px solid #00e676;
+  color: #00e676;
+  padding: 10px 28px;
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+#startBtn:hover {
+  background: #00e676;
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.55);
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 26px 22px 22px;
+  }
+
+  .content::before {
+    margin: -26px -22px 22px;
+  }
+
+  .count {
+    margin: 0 -22px -22px;
+  }
+
+  h1 {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-height: 520px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+  }
+
+  body {
+    min-height: 100svh;
+    padding-block: 16px;
+  }
+}

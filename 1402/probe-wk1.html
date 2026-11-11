@@ -1,0 +1,65 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>B41M Host Xploit | WebKit Probe</title>
+<style>body{background:#101014;color:#d0d0d0;font:14px monospace;padding:16px}pre{white-space:pre-wrap}</style>
+</head><body>
+<pre id="log"></pre>
+<script>
+var out = document.getElementById("log");
+function say(m) {
+  out.textContent += m + "\n";
+  try { var x = new XMLHttpRequest(); x.open("GET", "ag_log?m=" + encodeURIComponent("[e] wk " + m), false); x.send(); } catch (e) {}
+}
+function ua(){ return navigator.userAgent; }
+
+say("UA " + ua());
+
+/* 1. Canvas getContext reentrancy (CVE-2026-43720 / WebKit bug 313175).
+   Fixed WebKit: the nested call returns the SAME context.
+   Vulnerable WebKit: the inner request can replace/destroy the context
+   while the outer wrapper survives. We only detect object identity. */
+(function () {
+  try {
+    var c = document.createElement("canvas");
+    c.width = 8; c.height = 8;
+    var inner = null, innerErr = null;
+    var attrs = {};
+    Object.defineProperty(attrs, "alpha", {
+      get: function () {
+        try { inner = c.getContext("2d"); } catch (e) { innerErr = String(e); }
+        return true;
+      },
+      configurable: true
+    });
+    var outer = null, outerErr = null;
+    try { outer = c.getContext("2d", attrs); } catch (e) { outerErr = String(e); }
+    say("canvas outer=" + (outer ? "ctx" : String(outer)) + " inner=" + (inner ? "ctx" : String(inner)) +
+        " same=" + (outer === inner) + " innerErr=" + innerErr + " outerErr=" + outerErr);
+  } catch (e) { say("canvas test threw " + e); }
+})();
+
+/* 2. FontFace.prototype.then getter reentrancy reachability
+   (CVE-2026-43715 / WebKit bug 313577 family). We only measure whether the
+   setter/getter path is reachable; no corruption attempt. */
+(function () {
+  try {
+    var hadThen = Object.getOwnPropertyDescriptor(FontFace.prototype, "then");
+    say("fontface then descriptor=" + (hadThen ? "present" : "absent") +
+        " load=" + (typeof FontFace.prototype.load));
+    var f = new FontFace("probe", "url(data:font/woff;base64,AAAA)");
+    var st = null;
+    try { st = f.status; } catch (e) { st = "throw:" + e; }
+    say("fontface status=" + st + " family=" + (f.family || "?"));
+    var p = null;
+    try { p = f.load(); } catch (e) { say("load threw " + e); }
+    if (p) say("load promise=" + Object.prototype.toString.call(p) + " thenType=" + typeof p.then);
+  } catch (e) { say("fontface test threw " + e); }
+})();
+
+/* 3. environment facts that decide which primitives are usable */
+say("atomics=" + (typeof Atomics) + " sab=" + (typeof SharedArrayBuffer) +
+    " wasm=" + (typeof WebAssembly) + " webgl=" + (function(){
+      try { return !!document.createElement("canvas").getContext("webgl"); } catch (e) { return "throw"; }
+    })());
+say("done");
+</script>
+</body></html>
