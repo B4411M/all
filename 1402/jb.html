@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="id" manifest="cache.appcache">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>B41M Host Exploit PS4 — Running</title>
+    <style>
+      :root {
+        --bg: #0a0a0c;
+        --panel: #0d0d10;
+        --sunk: #111115;
+        --line: #1e1e24;
+        --fg: #c8c8cc;
+        --bright: #ffffff;
+        --dim: #888890;
+        --faint: #555560;
+        --ok: #00ff88;
+        --bad: #ff4444;
+        --warn: #ffaa00;
+        --accent: #00cc66;
+        --sans: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+        --mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0; padding: 0; min-height: 100%;
+        background: var(--bg);
+        color: var(--fg);
+        font: 14px/1.6 var(--sans);
+      }
+
+      /* ASCII Banner */
+      .banner {
+        padding: 20px 16px 12px;
+        text-align: center;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel);
+        overflow-x: auto;
+        white-space: pre;
+        font-size: 11px;
+        line-height: 1.15;
+        color: var(--ok);
+        font-family: var(--mono);
+      }
+
+      .banner .title-line {
+        color: var(--bright);
+        font-weight: 700;
+        margin-top: 8px;
+      }
+
+      /* Main container */
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 20px 16px 40px;
+      }
+
+      /* Status Panel */
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .panel-header {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        background: var(--sunk);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+      }
+
+      .panel-body {
+        padding: 14px;
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .status-line {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+
+      .status-label {
+        color: var(--dim);
+        min-width: 80px;
+      }
+
+      .status-value {
+        color: var(--fg);
+      }
+
+      .status-value.ok { color: var(--ok); }
+      .status-value.warn { color: var(--warn); }
+      .status-value.bad { color: var(--bad); }
+
+      .divider {
+        height: 1px;
+        background: var(--line);
+        margin: 12px 0;
+      }
+
+      /* Spinner */
+      #spin {
+        position: fixed;
+        top: calc(50% + 20px);
+        left: 50%;
+        width: 46px;
+        height: 46px;
+        margin: -23px 0 0 -23px;
+        border: 4px solid var(--line);
+        border-top-color: var(--ok);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Message overlay */
+      #msg {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        display: none;
+        text-align: center;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+        z-index: 10;
+        padding: 0 20px;
+      }
+
+      body.fail #spin { display: none; }
+      body.fail #msg { display: block; color: var(--bad); font-weight: 700; }
+      body.done #spin { display: none; }
+      body.done #msg { display: block; color: var(--ok); font-weight: 700; letter-spacing: 2px; }
+
+      /* Log view */
+      body.log {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      body.log #spin,
+      body.log #msg { display: none; }
+
+      body.log .container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+        padding: 14px 18px 30px;
+        max-width: none;
+      }
+
+      body.log #state {
+        display: block;
+        margin: 0 0 8px;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      body.log #out {
+        display: block;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: var(--sunk);
+        font: 12px/1.45 var(--mono);
+        white-space: pre-wrap;
+        color: var(--fg);
+      }
+
+      /* RAM Box */
+      #ramBox {
+        overflow: hidden;
+        padding: 8px 14px;
+        border-bottom: 1px solid var(--line);
+        background: var(--sunk);
+        color: var(--ok);
+        font: 12px/1.4 var(--mono);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 14px 20px;
+        border: 1px solid var(--accent);
+        border-radius: 5px;
+        background: transparent;
+        color: var(--accent);
+        font: 700 14px/1 var(--sans);
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .btn:hover,
+      .btn:focus {
+        background: var(--accent);
+        color: var(--bg);
+        outline: none;
+      }
+
+      .btn-secondary {
+        border-color: var(--dim);
+        color: var(--dim);
+      }
+
+      .btn-secondary:hover {
+        background: var(--dim);
+        color: var(--bg);
+      }
+
+      /* Console Image */
+      .console-img {
+        display: block;
+        max-width: 100%;
+        width: 280px;
+        margin: 20px auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--sunk);
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 30px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+        font-size: 11px;
+        line-height: 2;
+        color: var(--dim);
+        text-align: center;
+      }
+
+      .footer .label {
+        color: var(--faint);
+        min-width: 90px;
+        display: inline-block;
+        text-align: right;
+        margin-right: 8px;
+      }
+
+      .footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .footer a:hover { text-decoration: underline; }
+
+      /* Notice */
+      .notice {
+        margin: 1em 0;
+        padding: 0.7em 1em;
+        border: 2px solid #e66;
+        background: #2a1414;
+        color: #f99;
+        font: 700 14px/1.4 var(--sans);
+        border-radius: 5px;
+      }
+
+      .ok { color: var(--ok); }
+      .bad { color: var(--bad); }
+      .warn { color: var(--warn); }
+      code { color: #9fb3d0; }
+
+      /* Mobile */
+      @media (max-width: 480px) {
+        .banner { font-size: 9px; padding: 16px 10px 10px; }
+        .panel-body { font-size: 11px; }
+        .console-img { width: 100%; max-width: 260px; }
+        body.log #state { font-size: 18px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+██████╗ ██╗  ██╗ ██╗███╗   ███╗     ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗██████╗  ██████╗ ██╗  ██╗
+██══██╗██║  ██║███║████╗ ████║    ███║╚════██║██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔══██╗██╔═══██╗╚██╗██╔╝
+██████╔╝███████║╚██║██╔████╔██║    ╚██║    ██╔╝██████╔╝██║     ███████║ ╚████╝ ██████╔╝██║   ██║ ╚███╔╝ 
+██══██╗╚════██║ ██║██║╚██╔╝██║     ██║   ██╔╝ ██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██══██╗██║   ██║ ██╔██╗ 
+██████╔╝     ██║ ██║██║ ╚═╝ ██║     ██║   ██║  ██║     ███████╗██║  ██║   ██║   ██████╔╝╚██████╔╝██╔╝ ██╗
+╚═════╝      ╚═╝ ╚═╝╚═╝     ╚═╝     ╚═╝   ╚═╝  ╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝
+        <div class="title-line">B41M Host Exploit PS4</div>
+    </div>
+
+    <div class="container">
+      <div id="ramBox">RAM: checking...</div>
+
+      <div id="spin"></div>
+      <div id="msg">Restart your console</div>
+
+      <div id="wrap">
+        <div id="state"></div>
+        <div id="out"></div>
+      </div>
+
+      <div class="panel" style="display:none;" id="firmwarePanel">
+        <div class="panel-header">Firmware Terpilih</div>
+        <div class="panel-body">
+          <div class="status-line">
+            <span class="status-label">[FW]</span>
+            <span class="status-value ok" id="fwDisplay">-</span>
+          </div>
+          <div class="status-line">
+            <span class="status-label">[MODE]</span>
+            <span class="status-value" id="modeDisplay">-</span>
+          </div>
+          <div class="status-line">
+            <span class="status-label">[PAYLOAD]</span>
+            <span class="status-value" id="payloadDisplay">-</span>
+          </div>
+        </div>
+      </div>
+
+      <img class="console-img" src="logo.jpg" alt="PS4 Console" onerror="this.style.display='none'" />
+
+      <div class="panel">
+        <div class="panel-body" style="text-align:center; color:var(--dim);">
+          [SISTEM] Terminal siap. Menunggu eksekusi...
+        </div>
+      </div>
+
+      <div class="footer">
+        <div><span class="label">[ALAMAT]</span> Jl. Tahir, Muara Jawa, Kukar, KAL-TIM, Indonesia</div>
+        <div><span class="label">[KONTAK]</span> 085555551497</div>
+        <div><span class="label">[COPYRIGHT]</span> © B41M 17PlayBox</div>
+        <div><span class="label">[PEMILIK]</span> Ibrahim Yusuf</div>
+        <div style="margin-top:10px;">
+          <a href="index.html?change=1" class="btn btn-secondary">[ GANTI PILIHAN FIRMWARE ]</a>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import "./jb.js";
+    </script>
+  </body>
+</html>
